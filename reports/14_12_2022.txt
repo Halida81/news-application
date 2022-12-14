@@ -1,0 +1,10 @@
+yesterday:
+- подключение к api, testing in Postman
+- create-react-app
+- определять и создать структуру проекта
+- скачать иконки и лого
+- создать список переиспользуемых компонентов
+today:
+- создать reusable component input, button
+problems: 
+- пока нет :)
