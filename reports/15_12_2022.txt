@@ -1,0 +1,6 @@
+yesterday:
+- создать reusable component input, button
+today:
+- создать reusable component news card
+problems: 
+- пока нет :)
