@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
-import Input from "../../components/ui/Input";
+import Input from "../ui/Input";
 import InputPassword from "../ui/InputPassword";
-import Button from "../../components/ui/Button";
+import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
 
 function SignIn() {
