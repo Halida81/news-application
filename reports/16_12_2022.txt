@@ -1,0 +1,6 @@
+yesterday:
+- создать reusable component news card
+today: 
+- создать Sign In component
+problems:
+- пока нет :)
