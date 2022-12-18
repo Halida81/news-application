@@ -1,0 +1,6 @@
+yesterday:
+- создать Sign Up component
+today:
+- создать Sign In component
+problems:
+- пока нет:)
