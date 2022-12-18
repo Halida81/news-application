@@ -1,5 +1,4 @@
 import React, { forwardRef } from "react";
-
 import styled from "@emotion/styled";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { IconButton, InputAdornment } from "@mui/material";
@@ -8,7 +7,7 @@ import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg"
 
 const Input = forwardRef((props, ref) => {
   const {
-    type,
+    types,
     placeholder,
     name,
     id,
@@ -22,13 +21,16 @@ const Input = forwardRef((props, ref) => {
     edit,
     download,
     text,
+    autoComplete,
     ...other
   } = props;
 
   return (
     <>
       <StyledTextField
-        autoComplete="off"
+        inputProps={{
+          autoComplete: "off",
+        }}
         error={error}
         placeholder={placeholder}
         name={name}
@@ -42,12 +44,14 @@ const Input = forwardRef((props, ref) => {
         height={height}
         {...other}
         endAdornment={
-          <InputAdornment position="end">
-            <IconButton edge="end">
-              {edit ? <EditIcon /> : ""}
-              {download ? <DownloadIcon /> : ""}
-            </IconButton>
-          </InputAdornment>
+          <div>
+            <InputAdornment position="end">
+              <IconButton edge="end">
+                {edit ? <EditIcon /> : ""}
+                {download ? <DownloadIcon /> : ""}
+              </IconButton>
+            </InputAdornment>
+          </div>
         }
       />
     </>
