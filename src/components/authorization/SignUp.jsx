@@ -6,7 +6,7 @@ import InputPassword from "../ui/InputPassword";
 import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
 
-function SignIn() {
+function SignUp() {
   const {
     value: firstName,
     isValid: enteredFirstNameIsValid,
@@ -185,7 +185,7 @@ function SignIn() {
   );
 }
 
-export default SignIn;
+export default SignUp;
 
 const Container = styled("div")`
   box-sizing: border-box;
@@ -203,7 +203,7 @@ const StyledForm = styled("form")`
   width: 527px;
   height: 496px;
   background: #ffffff;
-  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.14);
+  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
 `;
 const Logo = styled(LogoIcon)`
