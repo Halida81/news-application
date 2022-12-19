@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import Input from "../ui/Input";
 import InputPassword from "../ui/InputPassword";
 import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { signUp } from "../../store/actions/SignUpActions";
+import SignIn from "./SignIn";
 
 function SignUp() {
+  const [error, setError] = useState("");
+  const [login, setLogin] = useState(false);
+  const { token } = useSelector((state) => state.authSlice.user);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     value: firstName,
     isValid: enteredFirstNameIsValid,
@@ -34,14 +45,14 @@ function SignUp() {
     hasError: passwordInputHasError,
     valueChangeHandler: passwordChangeHanlder,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput((value) => value.length >= 6);
+  } = useInput((value) => value.length >= 8);
   const {
     value: passwordTwo,
     isValid: passwordtwoIsValid,
     hasError: passwordTwoInputHasError,
     valueChangeHandler: passwordTwoChangeHanlder,
     inputBlurHandler: passwordTwoBlurHandler,
-  } = useInput((value) => value === password && value.length >= 6);
+  } = useInput((value) => value === password && value.length >= 8);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -63,125 +74,131 @@ function SignUp() {
       password === passwordTwo
     ) {
       const userData = {
-        firstName,
-        lastName,
-        nickName,
+        name: firstName,
+        last_name: lastName,
+        nickname: nickName,
         password,
+        password2: passwordTwo,
       };
-      console.log(userData);
+      dispatch(signUp({ userData, setError }));
     }
   };
 
-  const dataHandler = () => {
-    const userData = {
-      firstName,
-      lastName,
-      nickName,
-      password,
-    };
-    console.log(userData);
+  useEffect(() => {
+    if (token) {
+      navigate("/news");
+    }
+  }, []);
+
+  const loginHandler = () => {
+    setLogin((prev) => !prev);
   };
-
   return (
-    <Container>
-      <StyledForm onSubmit={submitHandler}>
-        <StyledLogo>
-          <Logo />
-        </StyledLogo>
-        <InputDiv>
-          <InputTitle>Фамилия</InputTitle>
-          <StyledDiv>
-            <Input
-              type="text"
-              name="lastName"
-              error={firstNameInputHasError}
-              value={firstName}
-              onChange={firstNameChangeHanlder}
-              onBlur={firstNameBlurHandler}
-            />
-            {lastNameInputHasError && <ErrorName>введите имя</ErrorName>}
-          </StyledDiv>
-        </InputDiv>
-        <InputDiv>
-          <InputTitle>Имя</InputTitle>
-          <StyledDiv>
-            <Input
-              type="text"
-              name="firstName"
-              error={lastNameInputHasError}
-              value={lastName}
-              onChange={lastNameChangeHanlder}
-              onBlur={lastNameBlurHandler}
-            />
-            {firstNameInputHasError && (
-              <ErrorLastName>введите фамилию</ErrorLastName>
-            )}
-          </StyledDiv>
-        </InputDiv>
-        <InputDiv>
-          <InputTitle>Никнейм</InputTitle>
-          <StyledDiv>
-            <Input
-              type="text"
-              name="nickName"
-              error={nickNameInputHasError}
-              value={nickName}
-              onChange={nickNameChangeHanlder}
-              onBlur={nickNameBlurHandler}
-            />
-            {nickNameInputHasError && (
-              <ErrorNickName>введите никнейм</ErrorNickName>
-            )}
-          </StyledDiv>
-        </InputDiv>
-        <InputDiv>
-          <InputTitle>Пароль</InputTitle>
-          <InputPassword
-            type="password"
-            name="password"
-            width="231px"
-            value={password}
-            onChange={passwordChangeHanlder}
-            onBlur={passwordBlurHandler}
-            error={passwordInputHasError}
-          />
-        </InputDiv>
-        <StyledDiv>
-          <LimitTitle>Лимит на символы</LimitTitle>
-          {passwordInputHasError && (
-            <StyledErrorValidation>
-              пароль должен содержать не менее 6 символов
-            </StyledErrorValidation>
-          )}
-        </StyledDiv>
+    <>
+      {!login ? (
+        <Container>
+          <StyledForm onSubmit={submitHandler}>
+            <StyledLogo>
+              <Logo />
+            </StyledLogo>
+            <InputDiv>
+              <InputTitle>Фамилия</InputTitle>
+              <StyledDiv>
+                <Input
+                  error={firstNameInputHasError}
+                  value={firstName}
+                  onChange={firstNameChangeHanlder}
+                  onBlur={firstNameBlurHandler}
+                  type="text"
+                  name="lastName"
+                />
+                {lastNameInputHasError && <ErrorName>введите имя</ErrorName>}
+              </StyledDiv>
+            </InputDiv>
+            <InputDiv>
+              <InputTitle>Имя</InputTitle>
+              <StyledDiv>
+                <Input
+                  error={lastNameInputHasError}
+                  value={lastName}
+                  onChange={lastNameChangeHanlder}
+                  onBlur={lastNameBlurHandler}
+                  type="text"
+                  name="firstName"
+                />
+                {firstNameInputHasError && (
+                  <ErrorLastName>введите фамилию</ErrorLastName>
+                )}
+              </StyledDiv>
+            </InputDiv>
+            <InputDiv>
+              <InputTitle>Никнейм</InputTitle>
+              <StyledDiv>
+                <Input
+                  error={nickNameInputHasError}
+                  value={nickName}
+                  onChange={nickNameChangeHanlder}
+                  onBlur={nickNameBlurHandler}
+                  type="text"
+                  name="nickName"
+                />
+                {nickNameInputHasError && (
+                  <ErrorNickName>введите никнейм</ErrorNickName>
+                )}
+              </StyledDiv>
+            </InputDiv>
+            <InputDiv>
+              <InputTitle>Пароль</InputTitle>
+              <InputPassword
+                value={password}
+                onChange={passwordChangeHanlder}
+                onBlur={passwordBlurHandler}
+                error={passwordInputHasError}
+                type="password"
+                name="password"
+                width="231px"
+              />
+            </InputDiv>
+            <StyledDiv>
+              <LimitTitle>Лимит на символы</LimitTitle>
+              {passwordInputHasError && (
+                <StyledErrorValidation>
+                  пароль должен содержать не менее 8 символов
+                </StyledErrorValidation>
+              )}
+            </StyledDiv>
 
-        <StyledLastDiv>
-          <StyledInputTitle>Подтверждение пароля</StyledInputTitle>
-          <StyledDiv>
-            <StyledInput
-              type="password"
-              name="passwordTwo"
-              value={passwordTwo}
-              onChange={passwordTwoChangeHanlder}
-              onBlur={passwordTwoBlurHandler}
-              error={passwordTwoInputHasError}
-            />
-            {passwordTwoInputHasError && (
-              <ErrorWithMargin>
-                пароль должен совпадать с предыдущим
-              </ErrorWithMargin>
-            )}
-          </StyledDiv>
-        </StyledLastDiv>
-        <ButtonDiv>
-          <Button onClick={dataHandler}>Регистрация</Button>
-        </ButtonDiv>
-        <SignUpDiv>
-          <SpanTitle>Уже есть логин?</SpanTitle>
-          <SingUpTitle>Войти</SingUpTitle>
-        </SignUpDiv>
-      </StyledForm>
-    </Container>
+            <StyledLastDiv>
+              <StyledInputTitle>Подтверждение пароля</StyledInputTitle>
+              <StyledDiv>
+                <StyledInput
+                  value={passwordTwo}
+                  onChange={passwordTwoChangeHanlder}
+                  onBlur={passwordTwoBlurHandler}
+                  error={passwordTwoInputHasError}
+                  type="password"
+                  name="passwordTwo"
+                />
+                {passwordTwoInputHasError && (
+                  <ErrorWithMargin>
+                    пароль должен совпадать с предыдущим
+                  </ErrorWithMargin>
+                )}
+              </StyledDiv>
+            </StyledLastDiv>
+            <ButtonDiv>
+              <Button type="submit">Регистрация</Button>
+            </ButtonDiv>
+            <SignUpDiv>
+              <SpanTitle>Уже есть логин?</SpanTitle>
+              <SingUpTitle onClick={loginHandler}>Войти</SingUpTitle>
+            </SignUpDiv>
+          </StyledForm>
+        </Container>
+      ) : (
+        <SignIn />
+      )}
+    </>
   );
 }
 

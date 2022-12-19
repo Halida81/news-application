@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import Input from "../ui/Input";
 import InputPassword from "../ui/InputPassword";
 import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
+import { useDispatch } from "react-redux";
+import { signIn } from "../../store/actions/SignInActions";
 
 function SignIn() {
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
   const {
     value: nickName,
     isValid: nickNameIsValid,
@@ -20,7 +24,7 @@ function SignIn() {
     hasError: passwordInputHasError,
     valueChangeHandler: passwordChangeHanlder,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput((value) => value.length >= 6);
+  } = useInput((value) => value.length >= 8);
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -29,19 +33,11 @@ function SignIn() {
     }
     if (nickName.trim() !== "" && password.trim() !== "") {
       const userData = {
-        nickName,
+        nickname: nickName,
         password,
       };
-      console.log(userData);
+      dispatch(signIn({ userData, setError }));
     }
-  };
-
-  const dataHandler = () => {
-    const userData = {
-      nickName,
-      password,
-    };
-    console.log(userData);
   };
 
   return (
@@ -81,12 +77,12 @@ function SignIn() {
         <StyledDiv>
           {passwordInputHasError && (
             <StyledErrorValidation>
-              пароль должен содержать не менее 6 символов
+              пароль должен содержать не менее 8 символов
             </StyledErrorValidation>
           )}
         </StyledDiv>
         <ButtonDiv>
-          <Button onClick={dataHandler}>Войти</Button>
+          <Button type="submit">Войти</Button>
         </ButtonDiv>
       </StyledForm>
     </Container>
@@ -149,7 +145,7 @@ const ButtonDiv = styled("div")`
 `;
 const StyledErrorValidation = styled("p")`
   margin: 0;
-  padding:0;
+  padding: 0;
   font-family: "Ubuntu";
   font-size: 12px;
   color: #b40e0e;
