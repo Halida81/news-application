@@ -7,7 +7,7 @@ import { ReactComponent as DownloadIcon } from "../../assets/icons/download.svg"
 
 const Input = forwardRef((props, ref) => {
   const {
-    types,
+    type,
     placeholder,
     name,
     id,
@@ -26,35 +26,32 @@ const Input = forwardRef((props, ref) => {
   } = props;
 
   return (
-    <>
-      <StyledTextField
-        inputProps={{
-          autoComplete: "off",
-        }}
-        error={error}
-        placeholder={placeholder}
-        name={name}
-        id={id}
-        onChange={onChange}
-        onBlur={onBlur}
-        ref={ref}
-        defaultValue={defaultValue}
-        value={value}
-        width={width}
-        height={height}
-        {...other}
-        endAdornment={
-          <div>
-            <InputAdornment position="end">
-              <IconButton edge="end">
-                {edit ? <EditIcon /> : ""}
-                {download ? <DownloadIcon /> : ""}
-              </IconButton>
-            </InputAdornment>
-          </div>
-        }
-      />
-    </>
+    <StyledTextField
+      inputProps={{
+        autoComplete: "off",
+      }}
+      type={type}
+      error={error}
+      placeholder={placeholder}
+      name={name}
+      id={id}
+      onChange={onChange}
+      onBlur={onBlur}
+      ref={ref}
+      defaultValue={defaultValue}
+      value={value}
+      width={width}
+      height={height}
+      {...other}
+      endAdornment={
+        <InputAdornment position="end">
+          <IconButton edge="end">
+            {edit ? <EditIcon /> : ""}
+            {download ? <DownloadIcon /> : ""}
+          </IconButton>
+        </InputAdornment>
+      }
+    />
   );
 });
 
