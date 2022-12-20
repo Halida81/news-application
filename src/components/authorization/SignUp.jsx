@@ -13,7 +13,7 @@ import SignIn from "./SignIn";
 
 function SignUp() {
   const [error, setError] = useState("");
-  const [login, setLogin] = useState(false);
+  // const [login, setLogin] = useState(false);
   const { token } = useSelector((state) => state.authSlice.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -86,118 +86,119 @@ function SignUp() {
 
   useEffect(() => {
     if (token) {
-      navigate("/news");
+      navigate("/login");
     }
   }, []);
 
   const loginHandler = () => {
-    setLogin((prev) => !prev);
+    navigate("/login");
   };
   return (
     <>
-      {!login ? (
-        <Container>
-          <StyledForm onSubmit={submitHandler}>
-            <StyledLogo>
-              <Logo />
-            </StyledLogo>
-            <InputDiv>
-              <InputTitle>Фамилия</InputTitle>
-              <StyledDiv>
-                <Input
-                  error={firstNameInputHasError}
-                  value={firstName}
-                  onChange={firstNameChangeHanlder}
-                  onBlur={firstNameBlurHandler}
-                  type="text"
-                  name="lastName"
-                />
-                {lastNameInputHasError && <ErrorName>введите имя</ErrorName>}
-              </StyledDiv>
-            </InputDiv>
-            <InputDiv>
-              <InputTitle>Имя</InputTitle>
-              <StyledDiv>
-                <Input
-                  error={lastNameInputHasError}
-                  value={lastName}
-                  onChange={lastNameChangeHanlder}
-                  onBlur={lastNameBlurHandler}
-                  type="text"
-                  name="firstName"
-                />
-                {firstNameInputHasError && (
-                  <ErrorLastName>введите фамилию</ErrorLastName>
-                )}
-              </StyledDiv>
-            </InputDiv>
-            <InputDiv>
-              <InputTitle>Никнейм</InputTitle>
-              <StyledDiv>
-                <Input
-                  error={nickNameInputHasError}
-                  value={nickName}
-                  onChange={nickNameChangeHanlder}
-                  onBlur={nickNameBlurHandler}
-                  type="text"
-                  name="nickName"
-                />
-                {nickNameInputHasError && (
-                  <ErrorNickName>введите никнейм</ErrorNickName>
-                )}
-              </StyledDiv>
-            </InputDiv>
-            <InputDiv>
-              <InputTitle>Пароль</InputTitle>
-              <InputPassword
-                value={password}
-                onChange={passwordChangeHanlder}
-                onBlur={passwordBlurHandler}
-                error={passwordInputHasError}
-                type="password"
-                name="password"
-                width="231px"
-              />
-            </InputDiv>
+      <Container>
+        <StyledForm onSubmit={submitHandler}>
+          <StyledLogo>
+            <Logo />
+          </StyledLogo>
+          <InputDiv>
+            <InputTitle>Фамилия</InputTitle>
             <StyledDiv>
-              <LimitTitle>Лимит на символы</LimitTitle>
-              {passwordInputHasError && (
-                <StyledErrorValidation>
-                  пароль должен содержать не менее 8 символов
-                </StyledErrorValidation>
+              <Input
+                error={firstNameInputHasError}
+                value={firstName}
+                onChange={firstNameChangeHanlder}
+                onBlur={firstNameBlurHandler}
+                type="text"
+                name="lastName"
+              />
+              {lastNameInputHasError && <ErrorName>введите имя</ErrorName>}
+            </StyledDiv>
+          </InputDiv>
+          <InputDiv>
+            <InputTitle>Имя</InputTitle>
+            <StyledDiv>
+              <Input
+                error={lastNameInputHasError}
+                value={lastName}
+                onChange={lastNameChangeHanlder}
+                onBlur={lastNameBlurHandler}
+                type="text"
+                name="firstName"
+              />
+              {firstNameInputHasError && (
+                <ErrorLastName>введите фамилию</ErrorLastName>
               )}
             </StyledDiv>
+          </InputDiv>
+          <InputDiv>
+            <InputTitle>Никнейм</InputTitle>
+            <StyledDiv>
+              <Input
+                error={nickNameInputHasError}
+                value={nickName}
+                onChange={nickNameChangeHanlder}
+                onBlur={nickNameBlurHandler}
+                type="text"
+                name="nickName"
+              />
+              {nickNameInputHasError && (
+                <ErrorNickName>введите никнейм</ErrorNickName>
+              )}
+            </StyledDiv>
+          </InputDiv>
+          <InputDiv>
+            <InputTitle>Пароль</InputTitle>
+            <InputPassword
+              value={password}
+              onChange={passwordChangeHanlder}
+              onBlur={passwordBlurHandler}
+              error={passwordInputHasError}
+              type="password"
+              name="password"
+              width="231px"
+            />
+          </InputDiv>
+          <StyledDiv>
+            <LimitTitle>Лимит на символы</LimitTitle>
+            {passwordInputHasError && (
+              <StyledErrorValidation>
+                пароль должен содержать не менее 8 символов
+              </StyledErrorValidation>
+            )}
+          </StyledDiv>
 
-            <StyledLastDiv>
-              <StyledInputTitle>Подтверждение пароля</StyledInputTitle>
-              <StyledDiv>
-                <StyledInput
-                  value={passwordTwo}
-                  onChange={passwordTwoChangeHanlder}
-                  onBlur={passwordTwoBlurHandler}
-                  error={passwordTwoInputHasError}
-                  type="password"
-                  name="passwordTwo"
-                />
-                {passwordTwoInputHasError && (
-                  <ErrorWithMargin>
-                    пароль должен совпадать с предыдущим
-                  </ErrorWithMargin>
-                )}
-              </StyledDiv>
-            </StyledLastDiv>
-            <ButtonDiv>
-              <Button type="submit">Регистрация</Button>
-            </ButtonDiv>
-            <SignUpDiv>
-              <SpanTitle>Уже есть логин?</SpanTitle>
-              <SingUpTitle onClick={loginHandler}>Войти</SingUpTitle>
-            </SignUpDiv>
-          </StyledForm>
-        </Container>
-      ) : (
+          <StyledLastDiv>
+            <StyledInputTitle>Подтверждение пароля</StyledInputTitle>
+            <StyledDiv>
+              <StyledInput
+                value={passwordTwo}
+                onChange={passwordTwoChangeHanlder}
+                onBlur={passwordTwoBlurHandler}
+                error={passwordTwoInputHasError}
+                type="password"
+                name="passwordTwo"
+              />
+              {passwordTwoInputHasError && (
+                <ErrorWithMargin>
+                  пароль должен совпадать с предыдущим
+                </ErrorWithMargin>
+              )}
+            </StyledDiv>
+          </StyledLastDiv>
+          <ButtonDiv>
+            {error ? <ErrorTitle>{error}</ErrorTitle> : ""}
+            <Button type="submit">Регистрация</Button>
+          </ButtonDiv>
+          <SignUpDiv>
+            <SpanTitle>Уже есть логин?</SpanTitle>
+            <SingUpTitle onClick={loginHandler}>Войти</SingUpTitle>
+          </SignUpDiv>
+        </StyledForm>
+      </Container>
+      {/* ) : (
         <SignIn />
-      )}
+      ) */}
+      {/* } */}
     </>
   );
 }
@@ -268,9 +269,10 @@ const StyledInputTitle = styled("span")`
 `;
 const ButtonDiv = styled("div")`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 43px;
+  margin-top: 23px;
 `;
 const SpanTitle = styled("span")`
   font-family: "Ubuntu";
@@ -359,4 +361,13 @@ const StyledDiv = styled("div")`
 const StyledLastDiv = styled("div")`
   display: flex;
   justify-content: space-around;
+`;
+
+const ErrorTitle = styled("p")`
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: red;
 `;

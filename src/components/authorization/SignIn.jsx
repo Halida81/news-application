@@ -5,11 +5,15 @@ import Input from "../ui/Input";
 import InputPassword from "../ui/InputPassword";
 import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { signIn } from "../../store/actions/SignInActions";
+import { useNavigate } from "react-router-dom";
 
 function SignIn() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.authSlice.user);
+
   const [error, setError] = useState("");
   const {
     value: nickName,
@@ -37,6 +41,12 @@ function SignIn() {
         password,
       };
       dispatch(signIn({ userData, setError }));
+    }
+  };
+
+  const goToNewsPageHandler = () => {
+    if (token) {
+      navigate("/news");
     }
   };
 
@@ -82,7 +92,10 @@ function SignIn() {
           )}
         </StyledDiv>
         <ButtonDiv>
-          <Button type="submit">Войти</Button>
+          {error ? <ErrorTitle>{error}</ErrorTitle> : ""}
+          <Button type="submit" onClick={goToNewsPageHandler}>
+            Войти
+          </Button>
         </ButtonDiv>
       </StyledForm>
     </Container>
@@ -139,9 +152,10 @@ const InputTitle = styled("span")`
 `;
 const ButtonDiv = styled("div")`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 43px;
+  margin-top: 13px;
 `;
 const StyledErrorValidation = styled("p")`
   margin: 0;
@@ -165,4 +179,12 @@ const ErrorNickName = styled("p")`
 const StyledDiv = styled("div")`
   display: flex;
   flex-direction: column;
+`;
+const ErrorTitle = styled("p")`
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 14px;
+  color: red;
 `;

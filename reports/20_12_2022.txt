@@ -1,0 +1,6 @@
+yesterday:
+ - интеграция с бекендом SignUp и SignIn
+ today:
+ - добавить приватный роутер
+ problems:
+ - пока неет :)
