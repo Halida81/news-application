@@ -5,8 +5,12 @@ import Button from "../components/ui/Button";
 import ImagePicker from "../components/ui/ImagePicker";
 import Input from "../components/ui/Input";
 import Selected from "../components/ui/Select";
+import { useDispatch } from "react-redux";
+import addNewsActions from "../store/actions/addNewsActions";
 
 const AddNewsModal = (props) => {
+  const dispatch = useDispatch();
+
   const { open, onClose } = props;
   const [photo, setPhoto] = useState(null);
   const [headerName, setHeaderName] = useState("");
@@ -32,12 +36,12 @@ const AddNewsModal = (props) => {
   const submitHandler = (e) => {
     e.preventDefault();
     const data = {
-      photo,
-      headerName,
-      shortDescription,
-      news,
+      image: photo,
+      title: headerName,
+      tag: shortDescription,
+      text: news,
     };
-    console.log(data);
+    dispatch(addNewsActions(data));
     setPhoto(null);
     setHeaderName("");
     setNews("");

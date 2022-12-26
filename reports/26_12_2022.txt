@@ -1,0 +1,6 @@
+yesterday:
+- добавлен newsPage, innerPage, selectedNews, profile
+today:
+-добавлен на эти страницы запросы 
+problems
+- пока нет

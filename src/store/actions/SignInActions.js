@@ -4,6 +4,7 @@ import { actionAuth } from "../slices/AuthSlice";
 const REMEMBER = "REMEMBER";
 
 export const signIn = ({ userData, setError }) => {
+  console.log(userData);
   return async (dispatch) => {
     try {
       const response = await appFetch({

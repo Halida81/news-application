@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import Input from "../ui/Input";
@@ -9,14 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { signUp } from "../../store/actions/SignUpActions";
-import SignIn from "./SignIn";
 
 function SignUp() {
-  const [error, setError] = useState("");
-  // const [login, setLogin] = useState(false);
-  const { token } = useSelector((state) => state.authSlice.user);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [error, setError] = useState("");
 
   const {
     value: firstName,
@@ -83,12 +82,6 @@ function SignUp() {
       dispatch(signUp({ userData, setError }));
     }
   };
-
-  useEffect(() => {
-    if (token) {
-      navigate("/login");
-    }
-  }, []);
 
   const loginHandler = () => {
     navigate("/login");

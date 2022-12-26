@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import Input from "../ui/Input";
@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const { token } = useSelector((state) => state.authSlice.user);
 
   const [error, setError] = useState("");
@@ -40,15 +41,15 @@ function SignIn() {
         nickname: nickName,
         password,
       };
-      dispatch(signIn({ userData, setError }));
+      dispatch(signIn({ userData, setError, token }));
     }
   };
 
-  const goToNewsPageHandler = () => {
+  useEffect(() => {
     if (token) {
       navigate("/news");
     }
-  };
+  }, [token, navigate]);
 
   return (
     <Container>
@@ -93,9 +94,7 @@ function SignIn() {
         </StyledDiv>
         <ButtonDiv>
           {error ? <ErrorTitle>{error}</ErrorTitle> : ""}
-          <Button type="submit" onClick={goToNewsPageHandler}>
-            Войти
-          </Button>
+          <Button type="submit">Войти</Button>
         </ButtonDiv>
       </StyledForm>
     </Container>

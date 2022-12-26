@@ -8,6 +8,10 @@ import store from "./store";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 
+import { injectStore } from "./api/CustomFetch";
+
+injectStore(store);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>

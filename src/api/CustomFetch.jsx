@@ -1,6 +1,10 @@
-import { store } from "../store";
-import { URL_BASE } from "../utils/constants/index";
+import { BASE_URL } from "../utils/constants/index";
 
+let store;
+
+export const injectStore = (_store) => {
+  store = _store;
+};
 export const appFetch = async (data) => {
   const { authSlice } = store.getState();
   try {
@@ -8,7 +12,7 @@ export const appFetch = async (data) => {
       method: data.method || "GET",
       headers: authSlice.user.token
         ? {
-            Authorization: `Bearer ${authSlice.user.token}`,
+            Authorization: `Token ${authSlice.user.token}`,
             "Content-Type": "application/json",
           }
         : {
@@ -35,11 +39,11 @@ export const appFetchFile = async (config) => {
     const requestOptions = {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${authSlice.user.token || ""}`,
+        Authorization: `Token ${authSlice.user.token || ""}`,
       },
       body: config.body,
     };
-    const response = await fetch(URL_BASE + config.url, requestOptions);
+    const response = await fetch(BASE_URL + config.url, requestOptions);
     if (!response.ok) {
       throw new Error(response.message);
     }

@@ -6,39 +6,91 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import photo from "../../assets/icons/photo.svg";
 import { ReactComponent as ShareIcon } from "../../assets/icons/share.svg";
 import { ReactComponent as FavoriteIcon } from "../../assets/icons/heart.svg";
 import { ReactComponent as RedHeartIcon } from "../../assets/icons/redHeart.svg";
+import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { likeActions } from "../../store/actions/LikeActions";
+import deletePost from "../../store/actions/deletePost";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({}));
 
-export default function NewsCard({ isLike, creaDate, title, text }) {
+export default function NewsCard({
+  id,
+  isLike,
+  creaDate,
+  title,
+  text,
+  tag,
+  image,
+  onClick,
+  alt,
+  wichIs,
+}) {
+  const dispatch = useDispatch();
   const [expanded, setExpanded] = React.useState(false);
+
+  const { profile } = useSelector((state) => state.profile);
+  const { nickname } = profile;
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
+  const likeHandler = (id) => {
+    dispatch(likeActions({ id, dispatch }));
+  };
   let a = ">>";
 
+  const deletePostHandler = (id) => {
+    dispatch(deletePost({ id, nickname }));
+  };
+  const wichIsHeartOrTrash = () => {
+    if (wichIs === "trash") {
+      return (
+        <span onClick={() => deletePostHandler(id)}>
+          <TrashIcon />
+        </span>
+      );
+    }
+    if (wichIs === "heart") {
+      if (isLike) {
+        return <RedHeartIcon />;
+      } else {
+        return (
+          <span onClick={() => likeHandler(id)}>
+            <FavoriteIcon />
+          </span>
+        );
+      }
+    }
+    return <TrashIcon />;
+  };
+
   return (
-    <StyledCard>
-      <StyledCardMedia component="img" image={photo} alt="news" />
+    <StyledCard id={id}>
+      <StyledCardMedia
+        component="img"
+        src={`https://megalab.pythonanywhere.com/${image}`}
+        alt={alt}
+      />
       <CardContent>
         <CardDiv>
           <StyledCardHeader subheader={creaDate} />
           <IconButton aria-label="add to favorites">
-            {isLike ? <RedHeartIcon /> : <StyledFavoriteIcon />}
+            {wichIsHeartOrTrash()}
           </IconButton>
         </CardDiv>
         <StyledTypography>{title}</StyledTypography>
-        <TextTypography>{text.slice(0, 180)}</TextTypography>
+        <TextTypography style={{ marginTop: "25px" }}>
+          {text.slice(0, 100)}
+        </TextTypography>
         <ExpandMore onClick={handleExpandClick} aria-label="show more">
-          <StyledMoreSpan>Читать дальше{a}</StyledMoreSpan>
+          <StyledMoreSpan onClick={onClick}>Читать дальше{a}</StyledMoreSpan>
         </ExpandMore>
         <br />
         <IconButton aria-label="share">
@@ -63,11 +115,6 @@ const StyledCardHeader = styled(CardHeader)`
   font-size: 10px;
   line-height: 150%;
   color: #858080;
-`;
-
-const StyledFavoriteIcon = styled(FavoriteIcon)`
-  width: 24px;
-  height: 24px;
 `;
 
 const CardDiv = styled("div")`
