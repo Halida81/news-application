@@ -12,33 +12,41 @@ import Button from "../components/ui/Button";
 import AddNewsModal from "../containers/AddNewsModal";
 import getMyPosts from "../store/actions/getMyPosts.Actions";
 import UserPageLayout from "../layout/UserPageLayout";
-
+import styled from "styled-components";
+import profileChange from "../store/actions/profileChangeActions";
+// import ImagePicker from "../components/ui/ImagePicker";
 
 function Profile() {
-  
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
+  // const [photo, setPhoto] = useState(null);
 
   const { myPosts } = useSelector((state) => state.myPosts);
   const user = useSelector((state) => state.profile.profile);
-
+  // console.log(user);
   const { nickname } = user;
   const { name } = user;
   const { last_name } = user;
+  const { profile_image } = user;
 
+  const [nameChange, setNameChange] = useState(name);
+  const [lastNameChange, setLastNameChange] = useState(last_name);
+  const [nickNameChange, setNickNameChange] = useState(nickname);
+  const [imageChange, setImageChange] = useState(profile_image);
+  // console.log(lastNameChange);
   let posts = myPosts.filter(function (elem) {
     return elem.author === nickname;
   });
 
   useEffect(() => {
     dispatch(getMyPosts({ nickname }));
-  }, []);
+  }, [nickname]);
 
   useEffect(() => {
     dispatch(profileActions());
-  }, []);
+  }, [name, last_name, nickname, profile_image]);
 
   const openModalHandler = () => {
     setModal((prev) => !prev);
@@ -48,32 +56,96 @@ function Profile() {
     navigate(`/news/${id}`);
   };
 
+  const onChangeImageValue = (file) => {
+    if (file.size <= 1000000) {
+      setImageChange(file);
+    }
+  };
+
+  const onChangeNameValue = (e) => {
+    setNameChange(e.target.value);
+  };
+
+  const onChangeLastNameValue = (e) => {
+    setLastNameChange(e.target.value);
+  };
+
+  const onChangeNickNameValue = (e) => {
+    setNickNameChange(e.target.value);
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const data = {
+      name: nameChange,
+      last_name: lastNameChange,
+      nickname: nickNameChange,
+      profile_image: imageChange,
+    };
+    console.log(data);
+    dispatch(profileChange(data));
+  };
   return (
     <UserPageLayout>
-      <div style={{ display: "flex" }}>
-        <div className="surotko">
-          <Ellipse />
+      <div>
+        <form onSubmit={submitHandler}>
+          <div className="surotko">
+            {profile_image ? (
+              <Img
+                // onChange={onChangeImageValue}
+                src={`https://megalab.pythonanywhere.com/${profile_image}`}
+                alt="img"
+              />
+            ) : (
+              <Ellipse />
+            )}
 
-          <div style={{ display: "flex" }}>
-            <p style={{ marginRight: "10px" }}>
-              Загрузить <img src={downIcon} alt="Down" />
-            </p>
-            <p>
-              Удалить <img src={deleteIcon} alt="Delete" />
-            </p>
+            <div>
+              {/* <ImagePicker
+                onChange={onChangeImageValue}
+                newFile={profile_image}
+              /> */}
+              {/* <p style={{ marginRight: "10px" }}>
+                Загрузить <img src={downIcon} alt="Down" />
+              </p> */}
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={(e) => setImageChange(e.target.files[0])}
+              />
+              <p>
+                Удалить <img src={deleteIcon} alt="Delete" />
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="inputka">
-          <form style={{}}>
-            <label>Фамилия</label>
-            <Input edit="edit" value={last_name} />
-            <label>Имя</label>
-            <Input edit="edit" value={name} />
-            <label>Никнейм</label>
-            <Input edit="edit" value={nickname} />
-            <Button>Сохранить</Button>
-          </form>
-        </div>
+          {/* <div className="inputka"> */}
+          <label>Фамилия</label>
+          <Input
+            edit="edit"
+            onChange={onChangeLastNameValue}
+            value={lastNameChange}
+            type="text"
+            name="last_name"
+          />
+          <label>Имя</label>
+          <Input
+            edit="edit"
+            value={nameChange}
+            type="text"
+            name="name"
+            onChange={onChangeNameValue}
+          />
+          <label>Никнейм</label>
+          <Input
+            onChange={onChangeNickNameValue}
+            edit="edit"
+            value={nickNameChange}
+            type="text"
+            name="nickname"
+          />
+          <Button type="submir">Сохранить</Button>
+        </form>
+        {/* </div> */}
       </div>
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         {" "}
@@ -105,3 +177,9 @@ function Profile() {
 }
 
 export default Profile;
+
+const Img = styled("img")`
+  height: 199px;
+  width: 199px;
+  border-radius: 50%;
+`;

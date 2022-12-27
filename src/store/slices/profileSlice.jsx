@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import profileActions from "../actions/profileActions";
+import profileChange from "../actions/profileChangeActions";
 
 const initialState = {
   profile: [],
@@ -21,6 +22,16 @@ const profileSlice = createSlice({
     [profileActions.rejected]: (state, action) => {
       state.error = action.payload;
       state.loading = false;
+    },
+    [profileChange.pending]: (state) => {
+      state.loading = true;
+    },
+    [profileChange.fulfilled]: (state, action) => {
+      state.profile = action.payload;
+    },
+    [profileChange.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });
