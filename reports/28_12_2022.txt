@@ -1,0 +1,6 @@
+yesterday:
+- added request to change profile data
+today:
+- still doing yesterday's task
+problems:
+- при отправке фото сервер выдает ошибку " The submitted data was not a file. Check the encoding type on the form"
