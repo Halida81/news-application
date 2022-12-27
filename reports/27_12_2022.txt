@@ -1,0 +1,6 @@
+yesterday:
+- добавлен get post запросы на newsPage, innerPage, selectedNews, profile
+today:
+- изменение данных на профиле
+problems:
+- пока нет
