@@ -17,7 +17,10 @@ const ImagePicker = ({ onChange, newFile, id, ...otherProps }) => {
     setIcons("");
   };
   const imageHandler = () => {
+    const imageFile = refs.current;
     const image = URL.createObjectURL(refs.current.files[0]);
+    console.log("ImageHandler: "+imageFile);
+    console.log(imageFile);
     if (refs.current.files[0].size < 1000000) {
       setIcons(image);
       onChange(refs.current.files[0]);

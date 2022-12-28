@@ -1,25 +1,29 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { appFetch } from "../../api/CustomFetch";
 import profileActions from "./profileActions";
 
 const profileChange = createAsyncThunk(
-  "profileDataChange/profileDataChange",
-  async ({ nickname, name, last_name, profile_image }, { dispatch }) => {
-    console.log(nickname, name, last_name, profile_image);
-    const response = await appFetch({
+  "profile/profile",
+  async (data, { dispatch }) => {
+    const formData = new FormData();
+    formData.append("nickname", data.nickname);
+    formData.append("last_name", data.last_name);
+    formData.append("name", data.name);
+    formData.append(
+      "profile_image",
+      data.profile_image,
+      data.profile_image.name
+    );
+
+    let token = localStorage.getItem("my_token");
+
+    const response = fetch("https://megalab.pythonanywhere.com/user/", {
       method: "PUT",
+      body: formData,
       headers: {
-        "Content-type": "multipart/form-data",
-      },
-      url: "https://megalab.pythonanywhere.com/user/",
-      body: {
-        nickname,
-        name,
-        last_name,
-        profile_image,
+        Authorization: "Token " + token,
+        "content-length": `${data.profile_image.size}`,
       },
     });
-    console.log(response);
     dispatch(profileActions());
     return response;
   }

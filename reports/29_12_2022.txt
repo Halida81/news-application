@@ -1,0 +1,6 @@
+yesterday:
+- add request to change profile data
+today:
+- I can't resolve this "The submitted data was not a file. Check the encoding type on the form"
+problems:
+- can't send photo to server 

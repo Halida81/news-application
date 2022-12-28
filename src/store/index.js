@@ -5,6 +5,7 @@ import deletePostSlice from "./slices/deletePostSlice";
 import getMyPostsSlice from "./slices/getMyPostsSlice";
 import likeSlice from "./slices/LikeSlice";
 import newsSlice from "./slices/NewsSlice";
+import profileChangeSlice from "./slices/profileChangeSlice";
 import profileSlice from "./slices/profileSlice";
 import selectedNewsSlice from "./slices/SelectedNewsSlice";
 
@@ -18,6 +19,7 @@ export const store = configureStore({
     addNews: addNewsSlice.reducer,
     myPosts: getMyPostsSlice.reducer,
     deletePost: deletePostSlice.reducer,
+    // profileChange: profileChangeSlice.reducer,
   },
   // middleware: (getDefaultMiddleware) =>
   //   getDefaultMiddleware({

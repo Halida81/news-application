@@ -14,7 +14,7 @@ import getMyPosts from "../store/actions/getMyPosts.Actions";
 import UserPageLayout from "../layout/UserPageLayout";
 import styled from "styled-components";
 import profileChange from "../store/actions/profileChangeActions";
-// import ImagePicker from "../components/ui/ImagePicker";
+import ImagePicker from "../components/ui/ImagePicker";
 
 function Profile() {
   const navigate = useNavigate();
@@ -25,17 +25,20 @@ function Profile() {
 
   const { myPosts } = useSelector((state) => state.myPosts);
   const user = useSelector((state) => state.profile.profile);
-  // console.log(user);
+  // const data = useSelector((state) => state.profileChange);
+
+  // console.log(data);
   const { nickname } = user;
   const { name } = user;
   const { last_name } = user;
   const { profile_image } = user;
+  // console.log(name);
 
   const [nameChange, setNameChange] = useState(name);
   const [lastNameChange, setLastNameChange] = useState(last_name);
   const [nickNameChange, setNickNameChange] = useState(nickname);
   const [imageChange, setImageChange] = useState(profile_image);
-  // console.log(lastNameChange);
+  console.log(imageChange);
   let posts = myPosts.filter(function (elem) {
     return elem.author === nickname;
   });
@@ -46,7 +49,7 @@ function Profile() {
 
   useEffect(() => {
     dispatch(profileActions());
-  }, [name, last_name, nickname, profile_image]);
+  }, []);
 
   const openModalHandler = () => {
     setModal((prev) => !prev);
@@ -57,6 +60,7 @@ function Profile() {
   };
 
   const onChangeImageValue = (file) => {
+    console.log(file);
     if (file.size <= 1000000) {
       setImageChange(file);
     }
@@ -101,18 +105,15 @@ function Profile() {
             )}
 
             <div>
-              {/* <ImagePicker
-                onChange={onChangeImageValue}
-                newFile={profile_image}
-              /> */}
+              <ImagePicker onChange={onChangeImageValue} id="addPhoto" />
               {/* <p style={{ marginRight: "10px" }}>
                 Загрузить <img src={downIcon} alt="Down" />
               </p> */}
-              <input
+              {/* <input
                 type="file"
                 accept="image/png, image/jpeg"
                 onChange={(e) => setImageChange(e.target.files[0])}
-              />
+              /> */}
               <p>
                 Удалить <img src={deleteIcon} alt="Delete" />
               </p>
@@ -143,7 +144,7 @@ function Profile() {
             type="text"
             name="nickname"
           />
-          <Button type="submir">Сохранить</Button>
+          <Button type="submit">Сохранить</Button>
         </form>
         {/* </div> */}
       </div>

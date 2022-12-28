@@ -3,6 +3,8 @@ import { BASE_URL } from "../utils/constants/index";
 let store;
 
 export const injectStore = (_store) => {
+  console.log("inject store");
+  console.log(_store);
   store = _store;
 };
 export const appFetch = async (data) => {
