@@ -1,0 +1,6 @@
+yesterday:
+- upload user profile PUT request
+today:
+- add News Modal send to server request
+problems:
+- not yet
