@@ -11,3 +11,4 @@ export const DEFAULT_ROUTES = {
 
 export const NEWS_APP_AUTH = "NEWS_APP_AUTH";
 export const BASE_URL = "https://megalab.pythonanywhere.com/"
+                         // https://megalab.pythonanywhere.com/

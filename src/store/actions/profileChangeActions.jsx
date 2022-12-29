@@ -20,7 +20,7 @@ const profileChange = createAsyncThunk(
       method: "PUT",
       body: formData,
       headers: {
-        Authorization: "Token " + token,
+        Authorization: `Token ${token}`,
         "content-length": `${data.profile_image.size}`,
       },
     });

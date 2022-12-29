@@ -6,21 +6,22 @@ import PageLayout from "../layout/PageLayout";
 import { useNavigate } from "react-router-dom";
 
 function NewsPage() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.authSlice.user);
+  // const { token } = useSelector((state) => state.authSlice.user);
+  const token = localStorage.getItem("my_token");
   const posts = useSelector((state) => state.news.posts);
-
+  console.log(token);
+  console.log(posts);
   useEffect(() => {
-    dispatch(getNews(token));
+    dispatch(getNews());
   }, []);
 
   const goToInnerPage = (id) => {
     navigate(`/news/${id}`);
   };
-  
+
   return (
     <PageLayout>
       <div style={{ display: "flex" }}>

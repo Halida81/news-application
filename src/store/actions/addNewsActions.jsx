@@ -1,21 +1,36 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { appFetch } from "../../api/CustomFetch";
+import profileActions from "./profileActions";
 
 const addNewsActions = createAsyncThunk(
   "addNews/addNewsActions",
-  async ({ text, tag, image, title }) => {
-    console.log(text, tag, image, title);
-    const response = await appFetch({
-      url: "https://megalab.pythonanywhere.com/post/",
-      body: {
-        title,
-        text,
-        image,
-        tag,
-      },
-    });
-    console.log(response);
-    return response;
+  async (data, { dispatch }) => {
+
+    const formData = new FormData();
+
+    formData.append("title", data.title);
+    formData.append("text", data.text);
+    formData.append("image", data.image);
+    formData.append("tag", data.tag);
+
+    let token = localStorage.getItem("my_token");
+
+    try {
+      const response = fetch("https://megalab.pythonanywhere.com/post/", {
+        method: "POST",
+        body: formData,
+        headers: {
+          Authorization: "Token " + token,
+        },
+      });
+
+      data.onClose();
+      dispatch(profileActions());
+      return response;
+      
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
   }
 );
 export default addNewsActions;

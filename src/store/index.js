@@ -3,6 +3,7 @@ import addNewsSlice from "./slices/addNewsSlice";
 import { authSlice } from "./slices/AuthSlice";
 import deletePostSlice from "./slices/deletePostSlice";
 import getMyPostsSlice from "./slices/getMyPostsSlice";
+import getTagSlice from "./slices/getTagSlice";
 import likeSlice from "./slices/LikeSlice";
 import newsSlice from "./slices/NewsSlice";
 import profileChangeSlice from "./slices/profileChangeSlice";
@@ -19,11 +20,11 @@ export const store = configureStore({
     addNews: addNewsSlice.reducer,
     myPosts: getMyPostsSlice.reducer,
     deletePost: deletePostSlice.reducer,
-    // profileChange: profileChangeSlice.reducer,
+    getTag: getTagSlice.reducer,
   },
-  // middleware: (getDefaultMiddleware) =>
-  //   getDefaultMiddleware({
-  //     serializableCheck: false,
-  //   }),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
 export default store;

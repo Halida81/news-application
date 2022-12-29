@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 import BasicModal from "../components/ui/BasicModal";
 import Button from "../components/ui/Button";
 import ImagePicker from "../components/ui/ImagePicker";
 import Input from "../components/ui/Input";
 import Selected from "../components/ui/Select";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import addNewsActions from "../store/actions/addNewsActions";
+import getTag from "../store/actions/getTag";
 
 const AddNewsModal = (props) => {
   const dispatch = useDispatch();
@@ -16,6 +17,12 @@ const AddNewsModal = (props) => {
   const [headerName, setHeaderName] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [news, setNews] = useState("");
+
+  const { tag } = useSelector((state) => state.getTag);
+
+  useEffect(() => {
+    dispatch(getTag());
+  }, []);
 
   const onChangeImageValue = (file) => {
     if (file.size <= 1000000) {
@@ -40,6 +47,7 @@ const AddNewsModal = (props) => {
       title: headerName,
       tag: shortDescription,
       text: news,
+      onClose,
     };
     dispatch(addNewsActions(data));
     setPhoto(null);
@@ -47,29 +55,6 @@ const AddNewsModal = (props) => {
     setNews("");
     setShortDescription("");
   };
-
-  const title = [
-    {
-      name: "Спорт",
-      id: "1",
-    },
-    {
-      name: "Звезды",
-      id: "2",
-    },
-    {
-      name: "Искусство",
-      id: "3",
-    },
-    {
-      name: "Мода",
-      id: "4",
-    },
-    {
-      name: "Политика",
-      id: "5",
-    },
-  ];
 
   const handler = () => {
     console.log("a");
@@ -108,7 +93,7 @@ const AddNewsModal = (props) => {
         </ModalChildDiv>
         <ModalChildDiv>
           <StyledTitle>Выбрать категорию </StyledTitle>
-          <Selected onChange={handler} title={title} />
+          <Selected onChange={handler} title={tag} />
         </ModalChildDiv>
         <StyledInput value="#не выбрано" width="150px" height="38px" />
         <StyledButton>

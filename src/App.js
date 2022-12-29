@@ -4,7 +4,7 @@ function App() {
   return (
     <div className="App">
       <AppRoutes />
-      <ImageChooser/>
+      {/* <ImageChooser/> */}
     </div>
   );
 }

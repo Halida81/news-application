@@ -7,7 +7,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import NewsCard from "../components/ui/NewsCard";
 import profileActions from "../store/actions/profileActions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../components/ui/Button";
 import AddNewsModal from "../containers/AddNewsModal";
 import getMyPosts from "../store/actions/getMyPosts.Actions";
@@ -20,25 +20,24 @@ function Profile() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [params, setParams] = useSearchParams();
+  const { addNews } = Object.fromEntries([...params]);
+
   const [modal, setModal] = useState(false);
-  // const [photo, setPhoto] = useState(null);
 
   const { myPosts } = useSelector((state) => state.myPosts);
   const user = useSelector((state) => state.profile.profile);
-  // const data = useSelector((state) => state.profileChange);
 
-  // console.log(data);
   const { nickname } = user;
   const { name } = user;
   const { last_name } = user;
   const { profile_image } = user;
-  // console.log(name);
 
   const [nameChange, setNameChange] = useState(name);
   const [lastNameChange, setLastNameChange] = useState(last_name);
   const [nickNameChange, setNickNameChange] = useState(nickname);
   const [imageChange, setImageChange] = useState(profile_image);
-  console.log(imageChange);
+
   let posts = myPosts.filter(function (elem) {
     return elem.author === nickname;
   });
@@ -49,12 +48,14 @@ function Profile() {
 
   useEffect(() => {
     dispatch(profileActions());
-  }, []);
+  }, [imageChange]);
 
   const openModalHandler = () => {
-    setModal((prev) => !prev);
+    setParams({ addNews: true });
   };
-
+  const closeModalHandler = () => {
+    setParams({});
+  };
   const goToInnerPage = (id) => {
     navigate(`/news/${id}`);
   };
@@ -86,9 +87,9 @@ function Profile() {
       nickname: nickNameChange,
       profile_image: imageChange,
     };
-    console.log(data);
     dispatch(profileChange(data));
   };
+
   return (
     <UserPageLayout>
       <div>
@@ -96,7 +97,6 @@ function Profile() {
           <div className="surotko">
             {profile_image ? (
               <Img
-                // onChange={onChangeImageValue}
                 src={`https://megalab.pythonanywhere.com/${profile_image}`}
                 alt="img"
               />
@@ -106,20 +106,11 @@ function Profile() {
 
             <div>
               <ImagePicker onChange={onChangeImageValue} id="addPhoto" />
-              {/* <p style={{ marginRight: "10px" }}>
-                Загрузить <img src={downIcon} alt="Down" />
-              </p> */}
-              {/* <input
-                type="file"
-                accept="image/png, image/jpeg"
-                onChange={(e) => setImageChange(e.target.files[0])}
-              /> */}
               <p>
                 Удалить <img src={deleteIcon} alt="Delete" />
               </p>
             </div>
           </div>
-          {/* <div className="inputka"> */}
           <label>Фамилия</label>
           <Input
             edit="edit"
@@ -140,19 +131,27 @@ function Profile() {
           <Input
             onChange={onChangeNickNameValue}
             edit="edit"
-            value={nickNameChange}
+            value={nickname}
             type="text"
             name="nickname"
           />
           <Button type="submit">Сохранить</Button>
         </form>
-        {/* </div> */}
       </div>
       <div style={{ display: "flex", justifyContent: "space-around" }}>
         {" "}
         <h2>Мои публикации</h2>{" "}
         <Button onClick={openModalHandler}>Новая публикация</Button>
-        {modal ? <AddNewsModal open={modal} onClose={openModalHandler} /> : ""}
+        {addNews ? (
+          <AddNewsModal
+            open={addNews === "true"}
+            onClose={closeModalHandler}
+            name="add"
+            onOpen={openModalHandler}
+          />
+        ) : (
+          ""
+        )}
       </div>
 
       {posts.map((news) => {
