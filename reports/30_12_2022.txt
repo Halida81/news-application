@@ -1,0 +1,6 @@
+yesterday:
+- add news modal with POST repuest
+today:
+- add filter to news Page
+problems:
+- not yet
