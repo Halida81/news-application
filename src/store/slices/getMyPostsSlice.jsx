@@ -16,6 +16,7 @@ const getMyPostsSlice = createSlice({
       state.loading = true;
     },
     [getMyPosts.fulfilled]: (state, action) => {
+      state.loading = false;
       state.myPosts = action.payload;
     },
     [getMyPosts.rejected]: (state, action) => {

@@ -7,20 +7,23 @@ import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { signUp } from "../../store/actions/SignUpActions";
+import signUpActions from "../../store/actions/SignUpActions";
 
 function SignUp() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [error, setError] = useState("");
+  const isError = useSelector((state) => state.authSlice.user);
+  const postError = isError?.non_field_errors;
 
+  
+  const isNickname = isError?.nickname
+  const error = postError?.map((el) => el);
   const {
     value: firstName,
     isValid: enteredFirstNameIsValid,
     hasError: firstNameInputHasError,
+    hasError2: firstNameError,
     valueChangeHandler: firstNameChangeHanlder,
     inputBlurHandler: firstNameBlurHandler,
   } = useInput((value) => value.trim() !== "");
@@ -28,6 +31,7 @@ function SignUp() {
     value: lastName,
     isValid: enteredLastNameIsValid,
     hasError: lastNameInputHasError,
+    hasError2: lastNameError,
     valueChangeHandler: lastNameChangeHanlder,
     inputBlurHandler: lastNameBlurHandler,
   } = useInput((value) => value.trim() !== "");
@@ -35,6 +39,7 @@ function SignUp() {
     value: nickName,
     isValid: nickNameIsValid,
     hasError: nickNameInputHasError,
+    hasError2: nickNameError,
     valueChangeHandler: nickNameChangeHanlder,
     inputBlurHandler: nickNameBlurHandler,
   } = useInput((value) => value.trim() !== "");
@@ -42,6 +47,7 @@ function SignUp() {
     value: password,
     isValid: passwordIsValid,
     hasError: passwordInputHasError,
+    hasError2: passwordError,
     valueChangeHandler: passwordChangeHanlder,
     inputBlurHandler: passwordBlurHandler,
   } = useInput((value) => value.length >= 8);
@@ -49,12 +55,22 @@ function SignUp() {
     value: passwordTwo,
     isValid: passwordtwoIsValid,
     hasError: passwordTwoInputHasError,
+    hasError2: passwordTwoError,
     valueChangeHandler: passwordTwoChangeHanlder,
     inputBlurHandler: passwordTwoBlurHandler,
   } = useInput((value) => value === password && value.length >= 8);
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
+    if (
+      firstNameError &&
+      lastNameError &&
+      nickNameError &&
+      passwordError &&
+      passwordTwoError
+    ) {
+      return;
+    }
     if (
       !enteredFirstNameIsValid &&
       !enteredLastNameIsValid &&
@@ -79,13 +95,16 @@ function SignUp() {
         password,
         password2: passwordTwo,
       };
-      dispatch(signUp({ userData, setError }));
+      dispatch(signUpActions(userData));
+
+      firstName("");
     }
   };
 
   const loginHandler = () => {
-    navigate("/login");
+    navigate("/auth/login");
   };
+
   return (
     <>
       <Container>
@@ -97,6 +116,7 @@ function SignUp() {
             <InputTitle>Фамилия</InputTitle>
             <StyledDiv>
               <Input
+                required
                 error={firstNameInputHasError}
                 value={firstName}
                 onChange={firstNameChangeHanlder}
@@ -104,13 +124,14 @@ function SignUp() {
                 type="text"
                 name="lastName"
               />
-              {lastNameInputHasError && <ErrorName>введите имя</ErrorName>}
+              {firstNameInputHasError && <ErrorName>введите имя</ErrorName>}
             </StyledDiv>
           </InputDiv>
           <InputDiv>
             <InputTitle>Имя</InputTitle>
             <StyledDiv>
               <Input
+                required
                 error={lastNameInputHasError}
                 value={lastName}
                 onChange={lastNameChangeHanlder}
@@ -118,7 +139,7 @@ function SignUp() {
                 type="text"
                 name="firstName"
               />
-              {firstNameInputHasError && (
+              {lastNameInputHasError && (
                 <ErrorLastName>введите фамилию</ErrorLastName>
               )}
             </StyledDiv>
@@ -127,6 +148,7 @@ function SignUp() {
             <InputTitle>Никнейм</InputTitle>
             <StyledDiv>
               <Input
+                required
                 error={nickNameInputHasError}
                 value={nickName}
                 onChange={nickNameChangeHanlder}
@@ -142,6 +164,8 @@ function SignUp() {
           <InputDiv>
             <InputTitle>Пароль</InputTitle>
             <InputPassword
+              className="password"
+              required
               value={password}
               onChange={passwordChangeHanlder}
               onBlur={passwordBlurHandler}
@@ -149,10 +173,10 @@ function SignUp() {
               type="password"
               name="password"
               width="231px"
+              autoComplete="true"
             />
           </InputDiv>
           <StyledDiv>
-            <LimitTitle>Лимит на символы</LimitTitle>
             {passwordInputHasError && (
               <StyledErrorValidation>
                 пароль должен содержать не менее 8 символов
@@ -160,16 +184,18 @@ function SignUp() {
             )}
           </StyledDiv>
 
-          <StyledLastDiv>
-            <StyledInputTitle>Подтверждение пароля</StyledInputTitle>
+          <InputDiv>
+            <InputTitle>Подтверждение пароля</InputTitle>
             <StyledDiv>
-              <StyledInput
+              <InputPassword
+                required
                 value={passwordTwo}
                 onChange={passwordTwoChangeHanlder}
                 onBlur={passwordTwoBlurHandler}
                 error={passwordTwoInputHasError}
                 type="password"
                 name="passwordTwo"
+                autoComplete="true"
               />
               {passwordTwoInputHasError && (
                 <ErrorWithMargin>
@@ -177,9 +203,9 @@ function SignUp() {
                 </ErrorWithMargin>
               )}
             </StyledDiv>
-          </StyledLastDiv>
+          </InputDiv>
           <ButtonDiv>
-            {error ? <ErrorTitle>{error}</ErrorTitle> : ""}
+            {<ErrorTitle>{error}</ErrorTitle>} {<ErrorTitle>{isNickname}</ErrorTitle>}
             <Button type="submit">Регистрация</Button>
           </ButtonDiv>
           <SignUpDiv>
@@ -188,10 +214,6 @@ function SignUp() {
           </SignUpDiv>
         </StyledForm>
       </Container>
-      {/* ) : (
-        <SignIn />
-      ) */}
-      {/* } */}
     </>
   );
 }
@@ -202,17 +224,16 @@ const Container = styled("div")`
   box-sizing: border-box;
   margin: 0 auto;
   width: 1510px;
-  height: 1110px;
-  background: #f6f4fa;
+  height: 100%;
 `;
 const StyledForm = styled("form")`
   box-sizing: border-box;
   position: absolute;
+  height: ${(hasErrors) => (hasErrors === 'true' ? '70%' : '60%')};
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 527px;
-  height: 496px;
   background: #ffffff;
   box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.4);
   border-radius: 15px;
@@ -228,18 +249,21 @@ const StyledLogo = styled("div")`
   align-items: center;
   margin-top: 24px;
 `;
-const StyledInput = styled(InputPassword)`
-  margin-right: 19px;
-  margin-top: 10px;
-`;
+
 const InputDiv = styled("div")`
   display: flex;
-  justify-content: space-around;
-  margin: 20px;
+  justify-content: space-between;
+  margin: 20px 10px 10px 10px;
+  .password:nth-child(1) {
+    ::after {
+      content: "лимит на символы";
+      position: absolute;
+      margin-top: 50px;
+      font-size: 12px;
+    }
+  }
 `;
 const InputTitle = styled("span")`
-  width: 72px;
-  height: 18px;
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
@@ -248,18 +272,7 @@ const InputTitle = styled("span")`
   color: #000000;
   margin-top: 8px;
 `;
-const StyledInputTitle = styled("span")`
-  width: 72px;
-  height: 18px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-  color: #000000;
-  margin-top: 8px;
-  margin-left: 18px;
-`;
+
 const ButtonDiv = styled("div")`
   display: flex;
   flex-direction: column;
@@ -286,9 +299,7 @@ const SingUpTitle = styled("span")`
   cursor: pointer;
 `;
 const SignUpDiv = styled("div")`
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
+  text-align: center;
 `;
 const StyledErrorValidation = styled("p")`
   margin: 0;
@@ -335,32 +346,19 @@ const ErrorWithMargin = styled("p")`
   text-align: end;
   margin-right: 11px;
 `;
-const LimitTitle = styled("label")`
-  margin-left: 44px;
-  text-align: center;
-  margin-top: -20px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 14px;
-  color: #5a5a5a;
-  z-index: 99;
-`;
+
 const StyledDiv = styled("div")`
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
 `;
-const StyledLastDiv = styled("div")`
-  display: flex;
-  justify-content: space-around;
-`;
 
-const ErrorTitle = styled("p")`
+const ErrorTitle = styled("span")`
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
   font-size: 12px;
   line-height: 14px;
   color: red;
+  margin-bottom: 10px;
 `;

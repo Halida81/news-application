@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../../assets/icons/logo.svg";
 import Input from "../ui/Input";
@@ -6,16 +6,17 @@ import InputPassword from "../ui/InputPassword";
 import Button from "../ui/Button";
 import { useInput } from "../../hooks/useInput";
 import { useDispatch, useSelector } from "react-redux";
-import { signIn } from "../../store/actions/SignInActions";
+import signInActions from "../../store/actions/SignInActions";
 import { useNavigate } from "react-router-dom";
 
 function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { token } = useSelector((state) => state.authSlice.user);
 
-  const [error, setError] = useState("");
+  const tokenn = useSelector((state) => state.sign.token);
+  const errorTitle = tokenn?.non_field_errors
+
   const {
     value: nickName,
     isValid: nickNameIsValid,
@@ -31,7 +32,7 @@ function SignIn() {
     inputBlurHandler: passwordBlurHandler,
   } = useInput((value) => value.length >= 8);
 
-  const submitHandler = async (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
     if (!passwordIsValid && !nickNameIsValid) {
       return;
@@ -41,16 +42,16 @@ function SignIn() {
         nickname: nickName,
         password,
       };
-      dispatch(signIn({ userData, setError, token }));
+      dispatch(signInActions(userData));
     }
   };
 
-  useEffect(() => {
-    if (token) {
-      navigate("/news");
-    }
-  }, [token, navigate]);
 
+
+
+  const newsPageHandler = () => {
+    navigate("/auth/login");
+  };
   return (
     <Container>
       <StyledForm onSubmit={submitHandler}>
@@ -78,6 +79,7 @@ function SignIn() {
           <InputPassword
             type="password"
             name="password"
+            autoComplete="true"
             width="231px"
             value={password}
             onChange={passwordChangeHanlder}
@@ -87,14 +89,12 @@ function SignIn() {
         </InputDiv>
         <StyledDiv>
           {passwordInputHasError && (
-            <StyledErrorValidation>
-              пароль должен содержать не менее 8 символов
-            </StyledErrorValidation>
+            <StyledErrorValidation>введите пароль</StyledErrorValidation>
           )}
         </StyledDiv>
         <ButtonDiv>
-          {error ? <ErrorTitle>{error}</ErrorTitle> : ""}
-          <Button type="submit">Войти</Button>
+          {<ErrorTitle>{errorTitle}</ErrorTitle>}
+          <Button type="submit" onClick={newsPageHandler}>Войти</Button>
         </ButtonDiv>
       </StyledForm>
     </Container>
@@ -108,7 +108,6 @@ const Container = styled("div")`
   margin: 0 auto;
   width: 527px;
   height: 286px;
-  background: #f6f4fa;
 `;
 const StyledForm = styled("form")`
   box-sizing: border-box;
@@ -183,7 +182,8 @@ const ErrorTitle = styled("p")`
   font-family: "Ubuntu";
   font-style: normal;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 13px;
+  padding-bottom: 5px;
   line-height: 14px;
   color: red;
 `;

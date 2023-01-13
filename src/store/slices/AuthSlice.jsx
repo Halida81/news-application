@@ -1,24 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { NEWS_APP_AUTH } from "../../utils/constants";
+import signUpActions from "../actions/SignUpActions";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem(NEWS_APP_AUTH)) || {
+  user: {
     id: null,
-    token: null,
     name: null,
     last_name: null,
-    password: null,
-    password2: null,
+    nickname: null,
+    profile_image: null,
+    token: ''
   },
+  loading: null,
+  error: "",
+  status: ""
+
 };
 
 export const authSlice = createSlice({
   name: "authSlice",
   initialState,
-
-  reducers: {
-    baseAuth(state, action) {
-      // const newItem = action.payload;
+  reducers: {},
+  extraReducers: {
+    [signUpActions.pending]: (state) => {
+      state.loading = true;
+    },
+    [signUpActions.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.status = "succes"
+      state.user = action.payload;
+    },
+    [signUpActions.rejected]: (state, action) => {
+      state.loading = false;
+      state.status = "failed"
+      state.error = action.response.data.message
     },
   },
 });

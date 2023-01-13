@@ -6,6 +6,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { ReactComponent as ClosedEyes } from "../../assets/icons/closedEyes.svg";
 import { ReactComponent as OpenedEyes } from "../../assets/icons/openedEyes.svg";
 
+
 const InputPassword = forwardRef((props, ref) => {
   const {
     placeholder,
@@ -30,7 +31,8 @@ const InputPassword = forwardRef((props, ref) => {
   };
 
   return (
-    <OutlinedInputStyled
+    <div>
+      <OutlinedInputStyled
       type={textOrPassword ? "text" : "password"}
       value={value}
       placeholder={placeholder}
@@ -53,6 +55,7 @@ const InputPassword = forwardRef((props, ref) => {
         </InputAdornment>
       }
     />
+    </div>
   );
 });
 

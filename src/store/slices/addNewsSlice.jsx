@@ -16,6 +16,7 @@ const addNewsSlice = createSlice({
       state.loading = true;
     },
     [addNewsActions.fulfilled]: (state, action) => {
+      state.loading = false;
       state.myNews = action.payload;
     },
     [addNewsActions.rejected]: (state, action) => {

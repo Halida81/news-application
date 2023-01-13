@@ -28,6 +28,15 @@ const BUTTON_VARIANTS = {
       backgroundColor: "#7E5BC2",
     },
   },
+  comment: {
+    width: "128px",
+    height: "38px",
+    backgroundColor: "#7E5BC2",
+    fontSize: "14px",
+    "&:hover": {
+      backgroundColor: "#7E5BC2",
+    },
+  },
 };
 
 const Button = ({
@@ -38,6 +47,8 @@ const Button = ({
   startIcon,
   active,
   disabled,
+  width,
+  height,
   ...other
 }) => {
   return (

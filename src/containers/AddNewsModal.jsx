@@ -17,8 +17,11 @@ const AddNewsModal = (props) => {
   const [headerName, setHeaderName] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [news, setNews] = useState("");
+const [tagValue, setTagValue] = useState('')
 
   const { tag } = useSelector((state) => state.getTag);
+  const user = useSelector((state) => state.profile.profile);
+  const { nickname } = user;
 
   useEffect(() => {
     dispatch(getTag());
@@ -40,14 +43,19 @@ const AddNewsModal = (props) => {
   const newsHandler = (e) => {
     setNews(e.target.value);
   };
+  const handler = (value) => {
+    setTagValue(value)
+  };
   const submitHandler = (e) => {
     e.preventDefault();
     const data = {
       image: photo,
       title: headerName,
-      tag: shortDescription,
+      short_desc: shortDescription,
+      tag: tagValue,
       text: news,
       onClose,
+      nickname,
     };
     dispatch(addNewsActions(data));
     setPhoto(null);
@@ -56,9 +64,7 @@ const AddNewsModal = (props) => {
     setShortDescription("");
   };
 
-  const handler = () => {
-    console.log("a");
-  };
+  
   return (
     <BasicModal open={open} onClose={onClose}>
       <Container onSubmit={submitHandler}>

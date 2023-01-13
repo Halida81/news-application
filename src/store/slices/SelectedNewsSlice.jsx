@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import  selectedNewsActions  from "../actions/LikeActions";
+import selectedNewsActions from "../actions/LikeActions";
 
 const initialState = {
   selectedNews: [],
@@ -14,8 +14,9 @@ const selectedNewsSlice = createSlice({
     [selectedNewsActions.pending]: (state) => {
       state.loading = true;
     },
-    [selectedNewsActions.fulfilled] : (state, action) =>{
-      state.selectedNews = action.payload
+    [selectedNewsActions.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.selectedNews = action.payload;
     },
     [selectedNewsActions.rejected]: (state, action) => {
       state.loading = false;
@@ -23,4 +24,4 @@ const selectedNewsSlice = createSlice({
     },
   },
 });
-export default selectedNewsSlice
+export default selectedNewsSlice;

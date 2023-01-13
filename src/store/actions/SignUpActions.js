@@ -1,71 +1,27 @@
-// import { appFetch } from "../../api/CustomFetch";
-// import { NEWS_APP_AUTH } from "../../utils/constants";
-// import { actionAuth } from "../slices/AuthSlice";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// export const signUp = ({ userData, setError }) => {
-//   return async (dispatch) => {
-//     try {
-//       const response = await appFetch({
-//         method: "POST",
-//         url: "https://megalab.pythonanywhere.com/registration/",
-//         body: userData,
-//       });
-//       const users = {
-//         id: response.id,
-//         token: response.token,
-//         name: response.name,
-//         last_name: response.last_name,
-//         nickname: response.nickname,
-//       };
-//       const json = JSON.stringify(users);
-//       localStorage.setItem(NEWS_APP_AUTH, json);
-//       dispatch(
-//         actionAuth.baseAuth({
-//           id: response.id,
-//           token: response.token,
-//           name: response.name,
-//           last_name: response.last_name,
-//           nickname: response.nickname,
-//         })
-//       );
-//     } catch (error) {
-//       setError("Этот аккаунт уже зарегистрирован");
-//     }
-//   };
-// };
-
-import { appFetch } from "../../api/CustomFetch";
-import { NEWS_APP_AUTH } from "../../utils/constants";
-import { actionAuth } from "../slices/AuthSlice";
-
-export const signUp = ({ userData, setError }) => {
-  return async (dispatch) => {
+const signUpActions = createAsyncThunk(
+  "authSlice/authSlice",
+  async (userData, { rejectWithValue }) => {
+    let formdata = new FormData();
+    formdata.append("nickname", userData.nickname);
+    formdata.append("name", userData.name);
+    formdata.append("last_name", userData.last_name);
+    formdata.append("password", userData.password);
+    formdata.append("password2", userData.password2);
     try {
-      const response = await appFetch({
-        method: "POST",
-        url: "https://megalab.pythonanywhere.com/registration/",
-        body: userData,
-      });
-      const users = {
-        id: response.id,
-        token: response.token,
-        name: response.name,
-        last_name: response.last_name,
-        nickname: response.nickname,
-      };
-      const json = JSON.stringify(users);
-      localStorage.setItem(NEWS_APP_AUTH, json);
-      dispatch(
-        actionAuth.baseAuth({
-          id: response.id,
-          token: response.token,
-          name: response.name,
-          last_name: response.last_name,
-          nickname: response.nickname,
-        })
+      const response = await fetch(
+        "https://megalab.pythonanywhere.com/registration/",
+        {
+          method: "POST",
+          body: formdata,
+        }
       );
+      const data = await response.json();
+      return data;
     } catch (error) {
-      setError("Этот аккаунт уже зарегистрирован");
+      rejectWithValue(error.response.data.error);
     }
-  };
-}
+  }
+);
+export default signUpActions;

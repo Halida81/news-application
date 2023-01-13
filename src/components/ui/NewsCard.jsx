@@ -1,28 +1,20 @@
 import * as React from "react";
 import { styled } from "@mui/material/styles";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardMedia from "@mui/material/CardMedia";
-import CardContent from "@mui/material/CardContent";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
 import { ReactComponent as ShareIcon } from "../../assets/icons/share.svg";
 import { ReactComponent as FavoriteIcon } from "../../assets/icons/heart.svg";
 import { ReactComponent as RedHeartIcon } from "../../assets/icons/redHeart.svg";
 import { ReactComponent as TrashIcon } from "../../assets/icons/trash.svg";
+import defaultIcon from "../../assets/icons/default.png";
 import { useDispatch, useSelector } from "react-redux";
-import { likeActions } from "../../store/actions/LikeActions";
+import { likeActions, unLikeActions } from "../../store/actions/LikeActions";
 import deletePost from "../../store/actions/deletePost";
+import Share from "../../containers/Share";
 
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({}));
+const FARTHER = ">>";
 
 export default function NewsCard({
   id,
   isLike,
-  creaDate,
   title,
   text,
   tag,
@@ -30,21 +22,32 @@ export default function NewsCard({
   onClick,
   alt,
   wichIs,
+  index,
 }) {
   const dispatch = useDispatch();
-  const [expanded, setExpanded] = React.useState(false);
+  const [share, setShare] = React.useState(false);
 
   const { profile } = useSelector((state) => state.profile);
   const { nickname } = profile;
 
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
+  const likeHandler = (id,tag) => {
+    const data = {
+      id,
+      tag
+    };
+    dispatch(likeActions(data));
   };
 
-  const likeHandler = (id) => {
-    dispatch(likeActions({ id, dispatch }));
+  const unLikeHandler = (id, tag) => {
+    const data = {
+      id,
+      tag
+    };
+    dispatch(unLikeActions(data));
   };
-  let a = ">>";
+  const isShareHandler = () => {
+    setShare((prev) => !prev);
+  };
 
   const deletePostHandler = (id) => {
     dispatch(deletePost({ id, nickname }));
@@ -59,10 +62,10 @@ export default function NewsCard({
     }
     if (wichIs === "heart") {
       if (isLike) {
-        return <RedHeartIcon />;
+        return <RedHeartIcon onClick={() => unLikeHandler(id, tag)} />;
       } else {
         return (
-          <span onClick={() => likeHandler(id)}>
+          <span onClick={() => likeHandler(id, tag)}>
             <FavoriteIcon />
           </span>
         );
@@ -71,102 +74,102 @@ export default function NewsCard({
     return <TrashIcon />;
   };
 
+  const titleHandler = () => {
+    if (title.length < 100) {
+      return title;
+    }
+    return title.slice(0, 90);
+  };
   return (
-    <StyledCard id={id}>
-      <StyledCardMedia
-        component="img"
-        src={`https://megalab.pythonanywhere.com/${image}`}
-        alt={alt}
-      />
-      <CardContent>
-        <CardDiv>
-          <StyledCardHeader subheader={creaDate} />
-          <IconButton aria-label="add to favorites">
-            {wichIsHeartOrTrash()}
-          </IconButton>
-        </CardDiv>
-        <StyledTypography>{title}</StyledTypography>
-        <TextTypography style={{ marginTop: "25px" }}>
-          {text.slice(0, 100)}
-        </TextTypography>
-        <ExpandMore onClick={handleExpandClick} aria-label="show more">
-          <StyledMoreSpan onClick={onClick}>Читать дальше{a}</StyledMoreSpan>
-        </ExpandMore>
-        <br />
-        <IconButton aria-label="share">
-          <ShareIcon style={{ marginLeft: "3px" }} />
-        </IconButton>
-      </CardContent>
-    </StyledCard>
+    <Wrapper>
+      <div>
+        {image === null ? (
+          <img src={defaultIcon} alt="z" />
+        ) : (
+          <Img src={`https://megalab.pythonanywhere.com/${image}`} alt={alt} />
+        )}
+      </div>
+
+      <div className="section">
+        <section>
+          <p className="date">
+            04.11.03 <span> TAG:{tag} </span>
+          </p>
+          {wichIsHeartOrTrash()}
+        </section>
+        <p className="header">{title.slice(0, 60)}</p>
+
+        <p className="content">{text.slice(0, 200)}</p>
+
+        <p className="more" onClick={onClick}>
+          Читать дальше{FARTHER}
+        </p>
+        <div className="share">
+          <ShareIcon onClick={isShareHandler} />
+          {share && (
+            <div className="icons">
+              <Share id={id} />
+            </div>
+          )}
+        </div>
+      </div>
+    </Wrapper>
   );
 }
+const Wrapper = styled("div")`
+  width: 845px;
+  display: flex;
+  margin: 0 auto;
+  justify-content: space-between;
+  border-bottom: 1px solid #D9D9D9;
+  .header {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 28px;
+  }
+  .share {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    cursor: pointer;
+  }
+  .icons {
+    margin-left: 20px;
+  }
 
-const StyledCardMedia = styled(CardMedia)`
+  .more {
+    color: blue;
+    border-bottom: 1px solid blue;
+    cursor: pointer;
+  }
+  background-color: #d5e3ee;
+  padding: 10px 20px;
+  img {
+    width: 255px;
+    height: 211px;
+  }
+  .section {
+    padding-left: 30px;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+  section {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .date {
+    span {
+      color: red;
+    }
+  }
+`;
+const Img = styled("img")`
   width: 255px;
   height: 211px;
-`;
-
-const StyledCardHeader = styled(CardHeader)`
-  width: 81px;
-  height: 24px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 150%;
-  color: #858080;
-`;
-
-const CardDiv = styled("div")`
-  display: flex;
-  justify-content: space-between;
-  margin-top: -30px;
-`;
-
-const StyledTypography = styled(Typography)`
-  margin-left: 15px;
-  width: 263px;
-  height: 28px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 500;
-  font-size: 24px;
-  line-height: 28px;
-  color: #000000;
-  margin-top: -10px;
-`;
-
-const TextTypography = styled(Typography)`
-  width: 546px;
-  height: 72px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #858080;
-  margin-left: 15px;
-  margin-top: 5px;
-`;
-
-const StyledMoreSpan = styled("span")`
-  border-bottom: 1px solid #7e5bc2;
-  width: 132px;
-  height: 24px;
-  font-family: "Ubuntu";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 150%;
-  color: #7e5bc2;
-  margin-left: 5px;
-  margin-top: -5px;
-`;
-
-const StyledCard = styled(Card)`
-  max-width: 842px;
-  display: flex;
-  padding: 10px;
-  border-bottom: 1px solid #d9d9d9;
-  margin-top: 16px;
 `;

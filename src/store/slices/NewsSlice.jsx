@@ -1,4 +1,4 @@
-import getNews, { getNewsDetail } from "../actions/NewsAction";
+import getSelectedNews, { getNews, getNewsDetail } from "../actions/NewsAction";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -32,6 +32,17 @@ const newsSlice = createSlice({
       state.post = action.payload;
     },
     [getNewsDetail.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    [getSelectedNews.pending]: (state) => {
+      state.loading = true;
+    },
+    [getSelectedNews.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.posts = action.payload;
+    },
+    [getSelectedNews.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

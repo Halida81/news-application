@@ -26,32 +26,34 @@ const Input = forwardRef((props, ref) => {
   } = props;
 
   return (
-    <StyledTextField
-      inputProps={{
-        autoComplete: "off",
-      }}
-      type={type}
-      error={error}
-      placeholder={placeholder}
-      name={name}
-      id={id}
-      onChange={onChange}
-      onBlur={onBlur}
-      ref={ref}
-      defaultValue={defaultValue}
-      value={value}
-      width={width}
-      height={height}
-      {...other}
-      endAdornment={
-        <InputAdornment position="end">
-          <IconButton edge="end">
-            {edit ? <EditIcon /> : ""}
-            {download ? <DownloadIcon /> : ""}
-          </IconButton>
-        </InputAdornment>
-      }
-    />
+    <>
+      <StyledTextField
+        inputProps={{
+          autoComplete: "off",
+        }}
+        type={type}
+        error={error}
+        placeholder={placeholder}
+        name={name}
+        id={id}
+        onChange={onChange}
+        onBlur={onBlur}
+        ref={ref}
+        defaultValue={defaultValue}
+        value={value}
+        width={width}
+        height={height}
+        {...other}
+        endAdornment={
+          <InputAdornment position="end">
+            <IconButton edge="end">
+              {edit ? <EditIcon /> : ""}
+              {download ? <DownloadIcon /> : ""}
+            </IconButton>
+          </InputAdornment>
+        }
+      />
+    </>
   );
 });
 
@@ -64,9 +66,13 @@ const StyledTextField = styled(OutlinedInput)((props) => ({
   display: "flex",
   borderRadius: "10px",
   border: "1px solid #D9D9D9",
+  background:'',
   alignItems: "center",
   width: props.width || "231px",
   height: props.height || "39px",
   fontFamily: "Ubuntu",
   fontWeight: "400",
+  color: "black",
 }));
+
+

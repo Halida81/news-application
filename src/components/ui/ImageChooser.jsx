@@ -1,12 +1,10 @@
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 function FileUploadSingle() {
   const [file, setFile] = useState();
 
   const handleFileChange = (e) => {
     if (e.target.files) {
-        console.log("handleFileChange");
-        console.log(e.target.files);
       setFile(e.target.files[0]);
     }
   };
@@ -33,8 +31,6 @@ function FileUploadSingle() {
       },
     })
       .then((res) => res.json())
-      .then((data) => console.log(data))
-      .catch((err) => console.error(err));
   };
 
   return (

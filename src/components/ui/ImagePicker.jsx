@@ -19,14 +19,12 @@ const ImagePicker = ({ onChange, newFile, id, ...otherProps }) => {
   const imageHandler = () => {
     const imageFile = refs.current;
     const image = URL.createObjectURL(refs.current.files[0]);
-    console.log("ImageHandler: "+imageFile);
-    console.log(imageFile);
     if (refs.current.files[0].size < 1000000) {
       setIcons(image);
       onChange(refs.current.files[0]);
     }
   };
-  
+
   return (
     <ImagePickerContainer icons={icons}>
       <Label icons={icons} htmlFor={id} />
@@ -72,8 +70,8 @@ const ImagePickerContainer = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 120px;
-  height: 33px;
+  width: 150px;
+  height: 36px;
   background: #f6f6f9;
   border: 1px solid #dcdce4;
   border-radius: 10px;
@@ -109,19 +107,19 @@ const Input = styled.input`
 `;
 const Label = styled.label`
   background-image: url(${DownloadIcon});
-  margin-left: 87px;
+  margin-left: 112px;
   display: block;
   margin-top: 27px;
   width: 200px;
-  height: 30px;
+  height: 40px;
   text-align: center;
   color: #8e8ea9;
   cursor: pointer;
   background-repeat: no-repeat;
   &::after {
-    content: "Загрузка ";
+    content: "Добавить фото";
     position: absolute;
-    margin-right: 40px;
+    margin-right: -15px;
     top: 50%;
     right: 4%;
     font-family: "Ubuntu";
@@ -129,6 +127,7 @@ const Label = styled.label`
     font-weight: 400;
     font-size: 14px;
     line-height: 16px;
+    width: 200px;
     color: black;
   }
   ${(props) =>

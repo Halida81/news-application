@@ -14,7 +14,7 @@ const profileChange = createAsyncThunk(
       data.profile_image.name
     );
 
-    let token = localStorage.getItem("my_token");
+    let token = localStorage.getItem("REMEMBER");
 
     const response = fetch("https://megalab.pythonanywhere.com/user/", {
       method: "PUT",
@@ -24,8 +24,10 @@ const profileChange = createAsyncThunk(
         "content-length": `${data.profile_image.size}`,
       },
     });
+    
+    const result = await response.json()
     dispatch(profileActions());
-    return response;
+    return result;
   }
 );
 

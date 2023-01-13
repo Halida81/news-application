@@ -1,10 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { appFetch } from "../../api/CustomFetch";
 
 const getTag = createAsyncThunk("getTag/getTag", async () => {
-  const response = await appFetch({
-    url: "https://megalab.pythonanywhere.com/tag/",
-  });
-  return response;
+  let token = localStorage.getItem("REMEMBER");
+
+  try {
+    const response = await fetch("https://megalab.pythonanywhere.com/tag/", {
+      method: "GET",
+      headers: {
+        Authorization: `Token ${token}`,
+      },
+    });
+    const data = await response.json()
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 });
+
 export default getTag;

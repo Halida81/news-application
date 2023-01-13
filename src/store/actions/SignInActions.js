@@ -1,35 +1,33 @@
-import { appFetch } from "../../api/CustomFetch";
-import { NEWS_APP_AUTH } from "../../utils/constants";
-import { actionAuth } from "../slices/AuthSlice";
-const REMEMBER = "REMEMBER";
-const MY_TOKEN = "my_token";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 
-export const signIn = ({ userData, setError }) => {
-  console.log(userData);
-  return async (dispatch) => {
+const signInActions = createAsyncThunk(
+  "sign/sign",
+  async (userData, { rejectWithValue }) => {
+    const data = JSON.stringify({
+      nickname: userData.nickname,
+      password: userData.password,
+    });
     try {
-      const response = await appFetch({
-        method: "POST",
-        url: "https://megalab.pythonanywhere.com/login/",
-        body: userData,
-      });
-      setError(response.message);
-      const users = {
-        token: response.token,
-      };
-      // const json = JSON.stringify(users);
-      localStorage.setItem(MY_TOKEN, response.token);
-      // localStorage.setItem(NEWS_APP_AUTH, json);
-      if (users) {
-        localStorage.setItem(REMEMBER);
-      }
-      dispatch(
-        actionAuth.baseAuth({
-          token: response.token,
-        })
+      const response = await fetch(
+        "https://megalab.pythonanywhere.com/login/",
+        {
+          method: "POST",
+          body: data,
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
       );
+      const result = await response.json();
+      const token = result?.token;
+      localStorage.setItem("REMEMBER", token);
+      return result;
     } catch (error) {
-      setError("Не правильный пароль или логин");
+      if (!error.response) {
+        throw error
+      }
+      return rejectWithValue(error.response.data.error);
     }
-  };
-};
+  }
+);
+export default signInActions;
