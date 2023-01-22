@@ -1,11 +1,7 @@
 import { useState } from "react";
-
 import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import styled from "styled-components";
-
-// import balls from '../../../../assets/images/Vector (4).png'
 
 export default function MeatBalls({ navigations, icon }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -53,10 +49,4 @@ export default function MeatBalls({ navigations, icon }) {
     </div>
   );
 }
-const Container = styled("div")`
-  width: 176px;
-  height: 89px;
-  background: #ffffff;
-  box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-`;
+

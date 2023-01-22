@@ -18,20 +18,13 @@ function SelectedNews() {
   }, [data]);
 
   const goToInnerPage = (id) => {
-    navigate(`/news/${id}`);
+    navigate(`/megalab/news/${id}`);
   };
 
   return (
     <>
       <SelectTitle>Избранные новости</SelectTitle>
-      <div
-        style={{
-          marginBottom: "80px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-        }}
-      >
+      <PostsContainer>
         {loading ? (
           <Loading />
         ) : (
@@ -54,7 +47,7 @@ function SelectedNews() {
             );
           })
         )}
-      </div>
+      </PostsContainer>
     </>
   );
 }
@@ -69,4 +62,10 @@ const SelectTitle = styled("p")`
   line-height: 55px;
   color: #000000;
   margin: 20px 0;
+`;
+const PostsContainer = styled("div")`
+  margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;

@@ -27,7 +27,7 @@ function NewsPage() {
   }, []);
 
   const goToInnerPage = (id) => {
-    navigate(`/app/news/${id}`);
+    navigate(`/megalab/news/${id}`);
   };
 
   const onAddCategory = (isChecked, value) => {
@@ -51,18 +51,16 @@ function NewsPage() {
         <Tags>
           {tag
             ? tag?.map((el) => {
-              return (
-                <StyledCheckbox key={el.id}>
-                  <input
-                    type="checkbox"
-                    onChange={(e) =>
-                      onAddCategory(e.target.checked, el.name)
-                    }
-                  />
-                  <span>{el.name}</span>
-                </StyledCheckbox>
-              );
-            })
+                return (
+                  <StyledCheckbox key={el.id}>
+                    <input
+                      type="checkbox"
+                      onChange={(e) => onAddCategory(e.target.checked, el.name)}
+                    />
+                    <span>{el.name}</span>
+                  </StyledCheckbox>
+                );
+              })
             : ""}
         </Tags>
 
@@ -70,11 +68,12 @@ function NewsPage() {
           Применить
         </Button>
       </div>
-      <div className="loading">
+      <div className="card">
         {loading ? (
-          <span><Loading /></span>
+          <span className="loading">
+            <Loading />
+          </span>
         ) : (
-
           posts?.slice(0, 10).map((post, i) => {
             return (
               <NewsCard
@@ -92,7 +91,6 @@ function NewsPage() {
               />
             );
           })
-
         )}
       </div>
     </Container>
@@ -101,23 +99,24 @@ function NewsPage() {
 
 export default NewsPage;
 
+const Container = styled("div")`
+  display: flex;
+  justify-content: center;
+  .card {
+    width: 845px;
+    .loading {
+      display: flex;
+      justify-content: center;
+    }
+  }
+`;
 
-const Container = styled('div')`
-   display: flex;
-   justify-content: space-between;
-   .loading{
-   margin-right: 500px;
-   }
-      
-`
-
-const Tags = styled('div')`
+const Tags = styled("div")`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-
-`
+`;
 const StyledFilterTitle = styled("p")`
   display: flex;
   justify-content: flex-start;
@@ -135,6 +134,3 @@ const StyledCheckbox = styled("div")`
     margin-right: 10px;
   }
 `;
-
-
-

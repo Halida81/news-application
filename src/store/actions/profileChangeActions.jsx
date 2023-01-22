@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showSuccessMessage } from "../../utils/helpers";
 import profileActions from "./profileActions";
 
 const profileChange = createAsyncThunk(
@@ -27,6 +28,7 @@ const profileChange = createAsyncThunk(
     
     const result = await response.json()
     dispatch(profileActions());
+    showSuccessMessage("Профиль успешно обновлен!")
     return result;
   }
 );

@@ -3,7 +3,7 @@ import profileActions from "../actions/profileActions";
 import profileChange from "../actions/profileChangeActions";
 
 const initialState = {
-  profile: [],
+  profile: null,
   loading: null,
   error: "",
 };

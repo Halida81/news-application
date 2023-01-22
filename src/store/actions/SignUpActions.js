@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showSuccessMessage } from "../../utils/helpers";
 
 const signUpActions = createAsyncThunk(
   "authSlice/authSlice",
@@ -18,6 +19,7 @@ const signUpActions = createAsyncThunk(
         }
       );
       const data = await response.json();
+      showSuccessMessage('Вы успешно зарегистрировались!')
       return data;
     } catch (error) {
       rejectWithValue(error.response.data.error);

@@ -43,7 +43,7 @@ function Share({ id }) {
             "linkedin",
             "facebook",
             "twitter",
-            "pinterest",
+            "telegram",
           ],
           padding: 12,
           radius: 50, 

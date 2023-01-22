@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { appFetch } from "../../api/CustomFetch";
+import { showSuccessMessage } from "../../utils/helpers";
 import getMyPosts from "./getMyPosts.Actions";
 
 
@@ -18,6 +19,7 @@ const deletePost = createAsyncThunk(
       }
     );
     const data = await response.json()
+    showSuccessMessage('Успешно удалень!')
     dispatch(getMyPosts({ nickname }));
     return data;
   }

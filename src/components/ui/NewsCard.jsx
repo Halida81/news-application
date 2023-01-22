@@ -23,11 +23,12 @@ export default function NewsCard({
   alt,
   wichIs,
   index,
+  width,
 }) {
   const dispatch = useDispatch();
   const [share, setShare] = React.useState(false);
 
-  const { profile } = useSelector((state) => state.profile);
+  const profile = useSelector((state) => state.profile);
   const { nickname } = profile;
 
   const likeHandler = (id,tag) => {
@@ -117,7 +118,7 @@ export default function NewsCard({
   );
 }
 const Wrapper = styled("div")`
-  width: 845px;
+  width: 100%;
   display: flex;
   margin: 0 auto;
   justify-content: space-between;
@@ -144,7 +145,7 @@ const Wrapper = styled("div")`
     border-bottom: 1px solid blue;
     cursor: pointer;
   }
-  background-color: #d5e3ee;
+  background-color: #e6ebee;
   padding: 10px 20px;
   img {
     width: 255px;

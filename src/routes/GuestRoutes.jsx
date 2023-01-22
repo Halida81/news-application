@@ -1,22 +1,43 @@
-import { Suspense } from "react";
-import { useSelector } from "react-redux";
+import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate, Outlet } from "react-router-dom";
-import SignIn from "../components/authorization/SignIn";
-import SignUp from "../components/authorization/SignUp";
 import Loading from "../components/ui/Loading";
-// import Error from "../containers/NotFoundPage";
 
-
+const SignInPage = lazy(() => import("../components/authorization/SignIn"));
+const SignUpPage = lazy(() => import("../components/authorization/SignUp"));
+const NotFoundPage = lazy(() => import("../containers/NotFoundPage"));
 const GuestRoutes = () => {
-
-    return (
-        <Routes>
-            <Route path="" element={<Navigate to="auth" />} />
-            <Route path="auth/*" element={<Outlet />} />
-            <Route index element={<Suspense fallback={<Loading />}><SignUp /></Suspense>} />
-            <Route path="login" index element={<Suspense fallback={<Loading />}><SignIn /></Suspense>} />
-        </Routes>
-    );
+  return (
+    <Routes>
+      <Route path="" element={<Navigate to="registration" />} />
+      <Route path="registration" element={<Outlet />} />
+      <Route
+        index
+        path="registration"
+        element={
+          <Suspense fallback={<Loading />}>
+            <SignUpPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="login"
+        element={
+          <Suspense fallback={<Loading />}>
+            <SignInPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/*"
+        index
+        element={
+          <Suspense fallback={<Loading />}>
+            <NotFoundPage />
+          </Suspense>
+        }
+      />
+    </Routes>
+  );
 };
 
 export default GuestRoutes;

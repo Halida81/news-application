@@ -24,14 +24,14 @@ function PageLayout({ children }) {
       id: "1",
       title: "Мой профиль",
       clickItem: () => {
-        navigate("/app/profile");
+        navigate("/megalab/profile");
       },
     },
     {
       id: "2",
       title: "Выйти",
       clickItem: () => {
-        logOutHandler();
+        logoutHandler();
       },
     },
   ];
@@ -41,15 +41,14 @@ function PageLayout({ children }) {
       id: "1",
       title: "Избранные новости",
       clickItem: () => {
-        navigate("/app/selectedNews");
+        navigate("/megalab/selectedNews");
       },
     },
   ];
 
-  const logOutHandler = () => {
+  const logoutHandler = () => {
     localStorage.clear();
-    navigate("/auth/registration");
-    // document.location.reload();
+    document.location.reload();
   };
 
   const valueChangeHandler = (event) => {
@@ -65,7 +64,7 @@ function PageLayout({ children }) {
   }, [value]);
 
   const searchResultOptionSelecHandler = (id) => {
-    navigate(`/app/news/${id}`);
+    navigate(`/megalab/news/${id}`);
     setValue("");
   };
 
@@ -78,21 +77,21 @@ function PageLayout({ children }) {
   };
 
   const profileHandler = () => {
-    navigate("/app/profile");
+    navigate("/megalab/profile");
   };
   const selectedNewsHandler = () => {
-    navigate("/app/selectedNews");
+    navigate("/megalab/selectedNews");
   };
 
   const toGoNewsPageHandler = () => {
-    navigate('/app/news')
-  }
+    navigate("/megalab/news");
+  };
   return (
     <div>
       <div>
         <StyledHeader>
           <Header>
-            <div onClick={toGoNewsPageHandler}>
+            <div className="logo" onClick={toGoNewsPageHandler}>
               <StyledLogoIcon />
             </div>
             <StyledIconsDiv>
@@ -181,9 +180,11 @@ const Header = styled("header")`
   padding-top: 30px;
   display: flex;
   justify-content: space-between;
+
 `;
 const StyledLogoIcon = styled(LogoIcon)`
   color: white;
+  cursor: pointer;
 `;
 const StyledIconsDiv = styled("div")`
   display: flex;

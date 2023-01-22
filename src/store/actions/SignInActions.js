@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showInfoMessage } from "../../utils/helpers";
 
 const signInActions = createAsyncThunk(
   "sign/sign",
@@ -21,7 +22,8 @@ const signInActions = createAsyncThunk(
       const result = await response.json();
       const token = result?.token;
       localStorage.setItem("REMEMBER", token);
-      return result;
+      showInfoMessage('Минутку...')
+      return response;
     } catch (error) {
       if (!error.response) {
         throw error

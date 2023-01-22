@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { showSuccessMessage } from "../../utils/helpers";
 import getMyPosts from "./getMyPosts.Actions";
 import profileActions from "./profileActions";
 
@@ -26,6 +27,7 @@ const addNewsActions = createAsyncThunk(
       const result = (await response).json()
       const nickname = data.nickname;
       data.onClose();
+      showSuccessMessage("Успешно создан!")
       dispatch(profileActions());
       dispatch(getMyPosts({ nickname }));
       return result;

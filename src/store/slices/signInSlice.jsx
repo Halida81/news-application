@@ -4,7 +4,7 @@ import signInActions from "../actions/SignInActions";
 const initialState = {
   loading: null,
   error: "",
-  token: [],
+  token: '',
 };
 
 const signInSlice = createSlice({

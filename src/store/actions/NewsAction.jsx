@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const getNewsDetail = createAsyncThunk(
-  "newsDetail/getNewsDetail",
+  "news/getNewsDetail",
   async (id) => {
     const token = localStorage.getItem("REMEMBER");
     const response = await fetch(
@@ -32,7 +32,7 @@ export const getNews = createAsyncThunk("news/getNews", async () => {
   return data;
 });
 
-const getSelectedNews = createAsyncThunk("news/news", async (selectedTag) => {
+const getSelectedNews = createAsyncThunk("news/getSelectedNews", async (selectedTag) => {
   let token = localStorage.getItem("REMEMBER");
   const response = await fetch(
     `https://megalab.pythonanywhere.com/post/?tag=${selectedTag}`,

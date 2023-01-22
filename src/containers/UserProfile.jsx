@@ -1,36 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import profileChange from "../store/actions/profileChangeActions";
-import profileActions from "../store/actions/profileActions";
-import { ReactComponent as UserProfileIcon } from "../assets/icons/cat.svg";
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import styled from "styled-components";
-import deleteIcon from "../assets/icons/trash.svg";
-import ImagePicker from "../components/ui/ImagePicker";
+import ImagePicker from "../components/ui/ImagePickerForProfile";
 
-function UserProfile() {
+function UserProfile({user}) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.profile.profile);
-  const { nickname } = user;
-  const { name } = user;
-  const { last_name } = user;
-  const { profile_image } = user;
-
-  const [nameChange, setNameChange] = useState('');
-  const [lastNameChange, setLastNameChange] = useState('');
-  const [nickNameChange, setNickNameChange] = useState('');
-  const [imageChange, setImageChange] = useState('');
- 
-
-  useEffect(() => {
-    dispatch(profileActions());
-  }, [name]);
+  const [error, setError] = useState(null);
+  const [nameChange, setNameChange] = useState("");
+  const [lastNameChange, setLastNameChange] = useState("");
+  const [nickNameChange, setNickNameChange] = useState("");
+  const [imageChange, setImageChange] = useState("");
 
   const onChangeImageValue = (file) => {
-    if (file.size <= 1000000) {
       setImageChange(file);
-    }
   };
 
   const onChangeNameValue = (e) => {
@@ -45,6 +30,10 @@ function UserProfile() {
     setNickNameChange(e.target.value);
   };
   const submitHandler = (e) => {
+    if (!nameChange && !lastNameChange && !nickNameChange && !imageChange) {
+      return setError(false);
+    }
+
     e.preventDefault();
     const data = {
       name: nameChange,
@@ -52,73 +41,55 @@ function UserProfile() {
       nickname: nickNameChange,
       profile_image: imageChange,
     };
+
     dispatch(profileChange(data));
   };
+
   return (
     <div>
-      <StyledForm
-        onSubmit={submitHandler}>
+      <StyledForm onSubmit={submitHandler}>
         <div className="user">
-          <UserDiv>
-            {profile_image ? (
-              <Img
-                src={`https://megalab.pythonanywhere.com/${profile_image}`}
-                alt="img"
-              />
-            ) : (
-              <UserProfileIcon />
-            )}
-          </UserDiv>
-
-          <span
-            style={{
-              width: "300px",
-              display: "flex",
-              justifyContent: "space-around",
-              padding: "10px",
-            }}
-          >
-            <ImagePicker onChange={onChangeImageValue} id="addPhoto" />
-            <span style={{ marginRight: "30px", marginTop: "5px" }}>
-              Удалить <img src={deleteIcon} alt="Delete" />
-            </span>
-          </span>
+            <ImagePicker
+              onChange={onChangeImageValue}
+              newPreview={user.profile_image}
+            />
         </div>
         <div className="data">
-          <label className="label">Фамилия</label>
-          <Input
-            edit="edit"
-            onChange={onChangeLastNameValue}
-            value={lastNameChange}
-            defaultValue={last_name}
-            type="text"
-            name="last_name"
-          />
-          <label className="label">Имя</label>
-          <Input
-            edit="edit"
-            value={nameChange}
-            defaultValue={name}
-            type="text"
-            name="name"
-            onChange={onChangeNameValue}
-          />
-          <label className="label">Никнейм</label>
-          <Input
-            onChange={onChangeNickNameValue}
-            edit="edit"
-            value={nickNameChange}
-            defaultValue={nickname}
-            type="text"
-            name="nickname"
-          />
-          <Button
-            type="submit"
-            style={{ marginTop: "30px", marginLeft: "100px" }}
-            variant="comment"
-          >
-            Сохранить
-          </Button>
+          <div>
+            <label className="label">Фамилия</label>
+            <label className="label">Никнейм</label>
+            <label className="label">Имя</label>
+          </div>
+          <div className="inputs">
+            <Input
+              // required
+              edit="edit"
+              onChange={onChangeLastNameValue}
+              defaultValue={user.last_name}
+              type="text"
+              name="last_name"
+            />
+            <Input
+              // required
+              edit="edit"
+              defaultValue={user.name}
+              type="text"
+              name="name"
+              onChange={onChangeNameValue}
+            />
+            <Input
+              // required
+              onChange={onChangeNickNameValue}
+              edit="edit"
+              defaultValue={user.nickname}
+              type="text"
+              name="nickname"
+            />
+            {error && <p>Все поля </p>}
+            <Button type="submit" variant="comment">
+              Сохранить
+            </Button>
+          </div>
         </div>
       </StyledForm>
     </div>
@@ -127,26 +98,43 @@ function UserProfile() {
 
 export default UserProfile;
 
-const StyledForm = styled('form')`
-   display: flex;
+const StyledForm = styled("form")`
+  display: flex;
   justify-content: flex-start;
-  
-  .label{
-    background-color: green;
-    display: block;
+  Button {
+    margin-left: 100px;
   }
-  .data{
-    background-color: lime;
-    
+  .photoAddOrDelete {
+    width: 300px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-right: 30px;
   }
+  .delete {
+    margin-right: 30px;
+    margin-top: 14px;
+  }
+  .data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 20px;
+    /* margin: 15px 0 0 40px; */
 
+    .label {
+      display: flex;
+      margin: 0 0 35px 0;
+    }
+    .inputs {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      grid-column-gap: 0px;
+      grid-row-gap: 18px;
+    }
+  }
+`;
+
+const UserContainer = styled('div')`
+  
 `
-const Img = styled("img")`
-  height: 199px;
-  width: 199px;
-  border-radius: 50%;
-`;
-const UserDiv = styled("div")`
-  width: 199px;
-  height: 199px;
-`;

@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoIcon } from "../assets/icons/logo.svg";
 import { ReactComponent as SearchIcon } from "../assets/icons/purpleSearch.svg";
@@ -19,13 +19,14 @@ function UserPageLayout({ children }) {
   const [open, setOpen] = useState(false);
 
   const options = useSelector((state) => state.search.searchResult);
+  const loading = useSelector((state) => state.search.searchResult);
 
   const profileNavigations = [
     {
       id: "1",
       title: "Мой профиль",
       clickItem: () => {
-        navigate("/app/profile");
+        navigate("/megalab/profile");
       },
     },
     {
@@ -40,16 +41,17 @@ function UserPageLayout({ children }) {
   const menuNavigations = [
     {
       id: "1",
-      title: "Избранные новости",
+      title: "Избранные новостиa",
       clickItem: () => {
-        navigate("/app/selectedNews");
+        navigate("/megalab/selectedNews");
       },
     },
   ];
 
   const logOutHandler = () => {
     localStorage.clear();
-    navigate("/auth");
+    document.location.reload();
+
   };
 
   useEffect(() => {
@@ -57,10 +59,10 @@ function UserPageLayout({ children }) {
   }, []);
 
   const profileHandler = () => {
-    navigate("/app/profile");
+    navigate("/megalab/profile");
   };
   const selectedNewsHandler = () => {
-    navigate("/app/selectedNews");
+    navigate("/megalab/selectedNews");
   };
 
   const openSearchInputHandler = () => {
@@ -80,7 +82,7 @@ function UserPageLayout({ children }) {
   }, [value]);
 
   const searchResultOptionSelecHandler = (id) => {
-    navigate(`/app/news/${id}`);
+    navigate(`/megalab/news/${id}`);
     setValue("");
   };
 
@@ -88,15 +90,15 @@ function UserPageLayout({ children }) {
     event.stopPropagation();
   };
 
-  const toGoNewsPageHandler =() =>{
-    navigate('/app/news')
-  }
+  const toGoNewsPageHandler = () => {
+    navigate("/megalab/news");
+  };
 
   return (
     <div>
       <StyledDiv>
         <StyledHeader>
-          <div onClick={toGoNewsPageHandler}>
+          <div classname="logo" onClick={toGoNewsPageHandler}>
             <HeaderLogoIcon />
           </div>
           <StyledIconsDiv>
@@ -170,9 +172,11 @@ const StyledHeader = styled("header")`
 `;
 const StyledLogoIcon = styled(LogoIcon)`
   color: white;
+  cursor: pointer;
 `;
 const HeaderLogoIcon = styled(LogoIcon)`
   color: #7e5bc2;
+  cursor: pointer;
 `;
 
 const StyledIconsDiv = styled("div")`

@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { appFetch } from "../../api/CustomFetch";
 
 const profileActions = createAsyncThunk(
-  "profile/profile",
+  "profile/profileAction",
   async () => {
     let token = localStorage.getItem("REMEMBER");
 

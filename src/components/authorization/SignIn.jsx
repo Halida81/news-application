@@ -13,9 +13,10 @@ function SignIn() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
-  const tokenn = useSelector((state) => state.sign.token);
-  const errorTitle = tokenn?.non_field_errors
+  const token = useSelector((state) => state.sign.token);
+  const data = useSelector((state) => state.sign);
+  const errorTitle = token?.non_field_errors;
+  // const status = data?.token?.status
 
   const {
     value: nickName,
@@ -32,7 +33,17 @@ function SignIn() {
     inputBlurHandler: passwordBlurHandler,
   } = useInput((value) => value.length >= 8);
 
-  const submitHandler = (e) => {
+  //   const onFinish = async (values) => {
+  //     const response = await signIn(values)
+  //     if (response.status === 'failed') {
+  //        setSignInErrorMessage(response.message)
+  //     }
+  //     if (response.status === 'success') {
+  //        form.resetFields()
+  //        navigate('/')
+  //     }
+  //  }
+  const submitHandler = async (e) => {
     e.preventDefault();
     if (!passwordIsValid && !nickNameIsValid) {
       return;
@@ -42,15 +53,19 @@ function SignIn() {
         nickname: nickName,
         password,
       };
-      dispatch(signInActions(userData));
+      dispatch(signInActions(userData))
+        .unwrap()
+        .then((data) => {
+          const { status } = data;
+          if (status === 200) {
+            navigate("/megalab/news");
+          }
+        });
     }
   };
 
-
-
-
   const newsPageHandler = () => {
-    navigate("/auth/login");
+    navigate("/megalab/news");
   };
   return (
     <Container>
@@ -89,12 +104,14 @@ function SignIn() {
         </InputDiv>
         <StyledDiv>
           {passwordInputHasError && (
-            <StyledErrorValidation>введите пароль</StyledErrorValidation>
+            <StyledErrorValidation>
+              пароль должен содержать не менее 8 символов
+            </StyledErrorValidation>
           )}
         </StyledDiv>
         <ButtonDiv>
           {<ErrorTitle>{errorTitle}</ErrorTitle>}
-          <Button type="submit" onClick={newsPageHandler}>Войти</Button>
+          <Button type="submit">Войти</Button>
         </ButtonDiv>
       </StyledForm>
     </Container>

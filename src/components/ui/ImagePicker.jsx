@@ -2,7 +2,8 @@ import React, { useRef, useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import DownloadIcon from "../../assets/icons/download.svg";
 
-const ImagePicker = ({ onChange, newFile, id, ...otherProps }) => {
+
+const ImagePicker = ({ onChange, newFile, id, borderNone, ...otherProps }) => {
   const refs = useRef();
   const [icons, setIcons] = useState();
   useEffect(() => {
@@ -72,10 +73,9 @@ const ImagePickerContainer = styled.div`
   align-items: center;
   width: 150px;
   height: 36px;
-  background: #f6f6f9;
-  border: 1px solid #dcdce4;
+  background: ${(borderNone) => (borderNone  ? '' : '#f6f6f9')};
+  border: ${(borderNone) => borderNone ? "" : "#dcdce4"};
   border-radius: 10px;
-  border: 1px solid #c3c2c5;
   ${(props) =>
     props.icons &&
     css`
@@ -109,7 +109,7 @@ const Label = styled.label`
   background-image: url(${DownloadIcon});
   margin-left: 112px;
   display: block;
-  margin-top: 27px;
+  margin-top: 36px;
   width: 200px;
   height: 40px;
   text-align: center;

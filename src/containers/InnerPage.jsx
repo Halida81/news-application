@@ -8,7 +8,7 @@ import { ReactComponent as RedHeartIcon } from "../assets/icons/redHeart.svg";
 import { ReactComponent as ShareIcon } from "../assets/icons/share.svg";
 import styled from "styled-components";
 import { likeActions } from "../store/actions/LikeActions";
-import TestComment from "./TestComment";
+import Comment from "./Comment";
 import Share from "./Share";
 import Loading from "../components/ui/Loading";
 
@@ -19,7 +19,7 @@ function InnerPage() {
   const dispatch = useDispatch();
 
   const { post } = useSelector((state) => state.news);
-  const { loading } = useSelector(state => state.news)
+  const { loading } = useSelector((state) => state.news);
   const data = post?.comment;
 
   useEffect(() => {
@@ -36,57 +36,72 @@ function InnerPage() {
 
   return (
     <>
-      {loading ? <LoadingDiv > <Loading /></LoadingDiv> : <Container>
-        <StyledDownIcon onClick={() => navigate(-1)} />
-        <div>
-          <div
-            className="header">
-            <>12.12.2022</>
-            <span onClick={() => likeHandler(id)}>
-              {post?.is_liked ? <RedHeartIcon /> : <HeartIcon />}
-            </span>
-          </div>
+      {loading ? (
+        <LoadingDiv>
+          {" "}
+          <Loading />
+        </LoadingDiv>
+      ) : (
+        <Container>
+          <StyledDownIcon onClick={() => navigate(-1)} />
           <div>
-            <p>{post?.title}</p>
-            <Img
-              src={`https://megalab.pythonanywhere.com/${post?.image}`}
-              alt="photo"
-            />
-            <p className="text">{post?.text}</p>
-            <StyledShareDiv>
-              <ShareIcon onClick={isShareHandler} />
-              <span>{share ? <Share id={id} /> : ""}</span>
-            </StyledShareDiv>
+            <div className="header">
+              <>12.12.2022</>
+              <span onClick={() => likeHandler(id)}>
+                {post?.is_liked ? <RedHeartIcon /> : <HeartIcon />}
+              </span>
+            </div>
             <div>
-              <TestComment data={data} id={id} />
+              <StyledTitle>{post?.title}</StyledTitle>
+              <Img
+                src={`https://megalab.pythonanywhere.com/${post?.image}`}
+                alt="photo"
+              />
+              <p className="text">{post?.text}</p>
+              <StyledShareDiv>
+                <ShareIcon onClick={isShareHandler} />
+                <span>{share ? <Share id={id} /> : ""}</span>
+              </StyledShareDiv>
+              <div>
+                <StyledCommentTitle>Комментарий</StyledCommentTitle>
+
+                <Comment data={data} id={post?.id} />
+              </div>
             </div>
           </div>
-        </div>
-      </Container>}
+        </Container>
+      )}
     </>
   );
 }
 
 export default InnerPage;
 
-const Container = styled('div')`
-  
+const Container = styled("div")`
   width: 845px;
-  .header{
+  .header {
     display: flex;
-              justify-content: space-between;
-              margin-bottom: 20px;
-  }
-  .text{
+    justify-content: space-between;
     margin-bottom: 20px;
   }
-`
+  .text {
+    font-family: "Ubuntu";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 150%;
+    color: #858080;
+    margin-bottom: 20px;
+  }
+`;
 const StyledShareDiv = styled("div")`
   cursor: pointer;
   display: flex;
   justify-content: flex-start;
   height: 30px;
+  margin-bottom: 20px;
   span {
+    margin-top: -5px;
     margin-left: 20px;
   }
 `;
@@ -97,9 +112,25 @@ const Img = styled("img")`
   margin-bottom: 24px;
 `;
 
-const LoadingDiv = styled('span')`
-display: flex;
-`
+const LoadingDiv = styled("span")`
+  display: flex;
+`;
 const StyledDownIcon = styled(DownIcon)`
-cursor: pointer;
-`
+  cursor: pointer;
+`;
+const StyledTitle = styled.p`
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+`;
+const StyledCommentTitle = styled.p`
+  font-family: "Ubuntu";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 28px;
+  margin-bottom: 10px;
+  color: #000000;
+`;

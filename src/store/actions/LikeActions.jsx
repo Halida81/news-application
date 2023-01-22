@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { appFetch } from "../../api/CustomFetch";
+import {  showSuccessMessage } from "../../utils/helpers";
 import getSelectedNews from "./NewsAction";
-import getNews, { getNewsDetail } from "./NewsAction";
+import  { getNewsDetail, getNews } from "./NewsAction";
 
 export const likeActions = createAsyncThunk(
   "like/likeSlice",
@@ -16,19 +16,19 @@ export const likeActions = createAsyncThunk(
       },
       body: JSON.stringify({
         post: id.id,
+        // tag:null
       }),
     });
     const data = response.json()
     dispatch(getNewsDetail(id.id));
-    dispatch(getSelectedNews(id.tag));
     dispatch(getNews());
-
+    showSuccessMessage('Успешно добавлен в избранные новости!')
     return data;
   }
 );
 
 export const unLikeActions = createAsyncThunk(
-  "like/likeSlice",
+  "like/unlikeSlice",
   async (id, { dispatch }) => {
     const token = localStorage.getItem("REMEMBER");
 
@@ -40,12 +40,14 @@ export const unLikeActions = createAsyncThunk(
       },
       body: JSON.stringify({
         post: id.id,
+        // tag:null
       }),
     });
     const data = response.json()
     dispatch(getNewsDetail(id.id));
-    dispatch(getSelectedNews(id.tag));
+    // dispatch(getSelectedNews(id.tag));
     dispatch(getNews());
+showSuccessMessage('Успешно удалень из избранных новостей')
     return data;
   }
 );

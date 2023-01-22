@@ -17,11 +17,12 @@ const AddNewsModal = (props) => {
   const [headerName, setHeaderName] = useState("");
   const [shortDescription, setShortDescription] = useState("");
   const [news, setNews] = useState("");
-const [tagValue, setTagValue] = useState('')
+  const [tagValue, setTagValue] = useState("");
 
   const { tag } = useSelector((state) => state.getTag);
-  const user = useSelector((state) => state.profile.profile);
-  const { nickname } = user;
+  const user = useSelector((state) => state.profile?.profile);
+
+  const nickname = user?.nickname;
 
   useEffect(() => {
     dispatch(getTag());
@@ -44,7 +45,7 @@ const [tagValue, setTagValue] = useState('')
     setNews(e.target.value);
   };
   const handler = (value) => {
-    setTagValue(value)
+    setTagValue(value);
   };
   const submitHandler = (e) => {
     e.preventDefault();
@@ -64,7 +65,6 @@ const [tagValue, setTagValue] = useState('')
     setShortDescription("");
   };
 
-  
   return (
     <BasicModal open={open} onClose={onClose}>
       <Container onSubmit={submitHandler}>
@@ -127,6 +127,7 @@ const StyledTextarea = styled("textarea")`
   height: 95px;
   border: 1px solid #dedce4;
   border-radius: 5px;
+  font-size: 12px;
 `;
 const StyledButton = styled("div")`
   display: flex;

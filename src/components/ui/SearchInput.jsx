@@ -7,6 +7,8 @@ export default function SearchInput({
   onClick,
   stopPropagationHandler,
 }) {
+
+
   const renderSearchResults = () => {
     if (options?.length > 0) {
       return options?.map((user) => {
@@ -27,7 +29,7 @@ export default function SearchInput({
         );
       });
     }
-    return <p>Не найдено</p>;
+      return <p style={{marginLeft:"20px"}}>не найдено</p>
   };
 
   return (
@@ -55,7 +57,7 @@ const ResultDiv = styled("div")`
   position: absolute;
   height: auto;
   top: 69px;
-  width: 40%;
+  width: 33%;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   z-index: 99;
 `;

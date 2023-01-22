@@ -16,8 +16,7 @@ function SignUp() {
   const isError = useSelector((state) => state.authSlice.user);
   const postError = isError?.non_field_errors;
 
-  
-  const isNickname = isError?.nickname
+  const isNickname = isError?.nickname;
   const error = postError?.map((el) => el);
   const {
     value: firstName,
@@ -95,8 +94,11 @@ function SignUp() {
         password,
         password2: passwordTwo,
       };
-      dispatch(signUpActions(userData));
-
+      dispatch(signUpActions(userData))
+        .unwrap()
+        .then(() => {
+          navigate("/auth/login");
+        });
       firstName("");
     }
   };
@@ -205,7 +207,8 @@ function SignUp() {
             </StyledDiv>
           </InputDiv>
           <ButtonDiv>
-            {<ErrorTitle>{error}</ErrorTitle>} {<ErrorTitle>{isNickname}</ErrorTitle>}
+            {<ErrorTitle>{error}</ErrorTitle>}{" "}
+            {<ErrorTitle>{isNickname}</ErrorTitle>}
             <Button type="submit">Регистрация</Button>
           </ButtonDiv>
           <SignUpDiv>
@@ -223,19 +226,19 @@ export default SignUp;
 const Container = styled("div")`
   box-sizing: border-box;
   margin: 0 auto;
-  width: 1510px;
-  height: 100%;
 `;
 const StyledForm = styled("form")`
   box-sizing: border-box;
   position: absolute;
-  height: ${(hasErrors) => (hasErrors === 'true' ? '70%' : '60%')};
   top: 50%;
   left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  width: 527px;
+  width: 500px;
+  padding: 30px;
   background: #ffffff;
-  box-shadow: 0px 4px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 4px 24px rgb(0 0 0 / 40%);
   border-radius: 15px;
 `;
 const Logo = styled(LogoIcon)`

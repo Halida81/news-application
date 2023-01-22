@@ -10,7 +10,7 @@ const commentstActions = createAsyncThunk(
       {
         method: "POST",
         headers: {
-          Authorization: token,
+          Authorization: `Token ${token}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
@@ -18,7 +18,7 @@ const commentstActions = createAsyncThunk(
       }
     );
     let id = obj.post;
-    dispatch(getNewsDetail({ id }));
+    dispatch(getNewsDetail(id));
     const data = await response.json()
     return data;
   }
@@ -43,6 +43,7 @@ export const commentReply = createAsyncThunk(
     );
     let id = obj.post;
     dispatch(getNewsDetail(id));
+    
     const data = await response.json()
     return data;
   }

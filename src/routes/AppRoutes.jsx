@@ -6,9 +6,9 @@ import ProtectedRoute from './ProtecRoute'
 export const AppRoutes = () => {
    return (
       <Routes>
-         <Route path="/" element={<Navigate to="/app" />} />
+         <Route path="/" element={<Navigate to="/megalab" />} />
          <Route
-            path="/app/*"
+            path="/megalab/*"
             element={
                <ProtectedRoute>
                   <UserRouter />
