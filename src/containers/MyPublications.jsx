@@ -8,6 +8,7 @@ import Loading from "../components/ui/Loading";
 import UserProfile from "./UserProfile";
 import styled from "styled-components";
 import profileActions from "../store/actions/profileActions";
+import getMyPosts from "../store/actions/getMyPosts.Actions";
 
 function Profile() {
   const navigate = useNavigate();
@@ -20,15 +21,15 @@ function Profile() {
   const { loading } = useSelector((state) => state.myPosts);
 
   const user = useSelector((state) => state.profile?.profile);
-  console.log(user);
+  const nickname = useSelector(state => state.profile?.profile?.nickname)
 
   let posts = myPosts.filter(function (elem) {
     return elem.author === user?.nickname;
   });
 
-  // useEffect(() => {
-  //   dispatch(getMyPosts({ nickname }));
-  // }, [user?.nickname]);
+  useEffect(() => {
+    dispatch(getMyPosts(nickname ));
+  }, [nickname]);
 
   useEffect(() => {
     dispatch(profileActions());

@@ -145,7 +145,6 @@ const Wrapper = styled("div")`
     border-bottom: 1px solid blue;
     cursor: pointer;
   }
-  background-color: #e6ebee;
   padding: 10px 20px;
   img {
     width: 255px;

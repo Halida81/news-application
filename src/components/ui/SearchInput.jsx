@@ -7,8 +7,6 @@ export default function SearchInput({
   onClick,
   stopPropagationHandler,
 }) {
-
-
   const renderSearchResults = () => {
     if (options?.length > 0) {
       return options?.map((user) => {
@@ -29,7 +27,7 @@ export default function SearchInput({
         );
       });
     }
-      return <p style={{marginLeft:"20px"}}>не найдено</p>
+    return <p style={{ marginLeft: "20px" }}>не найдено</p>;
   };
 
   return (
@@ -124,6 +122,9 @@ const StyledUserDiv = styled("div")`
   justify-content: flex-start;
   align-items: center;
   margin: 16px;
+  &:hover {
+    background-color: #faf4a3;
+  }
 `;
 
 const StyledContentTitle = styled("span")`
