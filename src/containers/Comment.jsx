@@ -28,7 +28,7 @@ const Comment = ({ data, id, length, test }) => {
     setComment(e.target.value);
   };
 
-  const replyHandler = (userId) => {
+  const replyHandler = (id) => {
     return setCommentReply((prev) => !prev);
   };
   return (
@@ -46,7 +46,7 @@ const Comment = ({ data, id, length, test }) => {
               <span
                 className="answer"
                 id={parent?.id}
-                onClick={(id) => replyHandler(id)}
+                onClick={() => replyHandler(id)}
               >
                 Ответить
               </span>

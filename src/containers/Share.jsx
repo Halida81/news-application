@@ -49,7 +49,7 @@ function Share({ id }) {
           radius: 50, 
           size: 40, 
 
-          url: `http://localhost:3000/news/${id}`, 
+          url: `https://megalab-news-ebon.vercel.app/megalab/news/${id}`, 
           image: "https://bit.ly/2CMhCMC", 
           description: "custom text",
           title: "title", 

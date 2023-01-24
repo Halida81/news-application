@@ -94,7 +94,7 @@ export default function NewsCard({
       <div className="section">
         <section>
           <p className="date">
-            04.11.03 <span> TAG:{tag} </span>
+            04.11.03 
           </p>
           {wichIsHeartOrTrash()}
         </section>
