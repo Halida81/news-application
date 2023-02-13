@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showInfoMessage } from "../../utils/helpers";
+import { BASE_URL } from "../../utils/constants";
 
 const signInActions = createAsyncThunk(
   "sign/sign",
@@ -10,7 +11,7 @@ const signInActions = createAsyncThunk(
     });
     try {
       const response = await fetch(
-        "https://megalab.pythonanywhere.com/login/",
+        `${BASE_URL}/login/`,
         {
           method: "POST",
           body: data,

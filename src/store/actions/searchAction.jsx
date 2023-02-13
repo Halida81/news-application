@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { BASE_URL } from "../../utils/constants";
 
 const searchAction = createAsyncThunk("search/search", async (value) => {
   if(value.length < 3){
@@ -7,7 +8,7 @@ const searchAction = createAsyncThunk("search/search", async (value) => {
   let token = localStorage.getItem("REMEMBER");
 
   const response = await fetch(
-    `https://megalab.pythonanywhere.com/post/?search=${value}`,
+    `${BASE_URL}/post/?search=${value}`,
     {
       headers: {
         Authorization: `Token ${token}`,

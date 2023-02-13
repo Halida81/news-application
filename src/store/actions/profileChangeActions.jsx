@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showSuccessMessage } from "../../utils/helpers";
 import profileActions from "./profileActions";
+import { BASE_URL } from "../../utils/constants";
 
 const profileChange = createAsyncThunk(
   "profile/profile",
@@ -17,7 +18,7 @@ const profileChange = createAsyncThunk(
 
     let token = localStorage.getItem("REMEMBER");
 
-    const response = fetch("https://megalab.pythonanywhere.com/user/", {
+    const response = fetch(`${BASE_URL}/user/`, {
       method: "PUT",
       body: formData,
       headers: {

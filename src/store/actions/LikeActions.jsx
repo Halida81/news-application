@@ -1,14 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {  showSuccessMessage } from "../../utils/helpers";
-import getSelectedNews from "./NewsAction";
-import  { getNewsDetail, getNews } from "./NewsAction";
+import { showSuccessMessage } from "../../utils/helpers";
+import { getNewsDetail, getNews } from "./NewsAction";
+import { BASE_URL } from "../../utils/constants";
 
 export const likeActions = createAsyncThunk(
   "like/likeSlice",
   async (id, { dispatch }) => {
     const token = localStorage.getItem("REMEMBER");
 
-    const response = await fetch("https://megalab.pythonanywhere.com/like/", {
+    const response = await fetch(`${BASE_URL}/like/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,13 +16,12 @@ export const likeActions = createAsyncThunk(
       },
       body: JSON.stringify({
         post: id.id,
-        // tag:null
       }),
     });
-    const data = response.json()
+    const data = response.json();
     dispatch(getNewsDetail(id.id));
     dispatch(getNews());
-    showSuccessMessage('Успешно добавлен в избранные новости!')
+    showSuccessMessage("Успешно добавлен в избранные новости!");
     return data;
   }
 );
@@ -32,7 +31,7 @@ export const unLikeActions = createAsyncThunk(
   async (id, { dispatch }) => {
     const token = localStorage.getItem("REMEMBER");
 
-    const response = await fetch("https://megalab.pythonanywhere.com/like/", {
+    const response = await fetch(`${BASE_URL}/like/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,26 +39,24 @@ export const unLikeActions = createAsyncThunk(
       },
       body: JSON.stringify({
         post: id.id,
-        // tag:null
       }),
     });
-    const data = response.json()
+    const data = response.json();
     dispatch(getNewsDetail(id.id));
-    // dispatch(getSelectedNews(id.tag));
     dispatch(getNews());
-showSuccessMessage('Успешно удалень из избранных новостей')
+    showSuccessMessage("Успешно удалень из избранных новостей");
     return data;
   }
 );
 
 const selectedNewsActions = createAsyncThunk("data/selectedNews", async () => {
   const token = localStorage.getItem("REMEMBER");
-  const response = await fetch("https://megalab.pythonanywhere.com/like/", {
+  const response = await fetch(`${BASE_URL}/like/`, {
     headers: {
       Authorization: `Token ${token}`,
     },
   });
-  const data = response.json()
+  const data = response.json();
   return data;
 });
 export default selectedNewsActions;

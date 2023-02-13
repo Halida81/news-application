@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { getNewsDetail } from "./NewsAction";
+import { BASE_URL } from "../../utils/constants";
 
 const commentstActions = createAsyncThunk(
   "comment/comment",
   async (obj, { dispatch }) => {
     let token = localStorage.getItem("REMEMBER");
     const response = await fetch(
-      "https://megalab.pythonanywhere.com/comment/",
+      `${BASE_URL}/comment/`,
       {
         method: "POST",
         headers: {
@@ -31,7 +32,7 @@ export const commentReply = createAsyncThunk(
   async (obj, { dispatch }) => {
     let token = localStorage.getItem("REMEMBER");
     const response = await fetch(
-      "https://megalab.pythonanywhere.com/comment/",
+      `${BASE_URL}/comment/`,
       {
         method: "POST",
         headers: {

@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showSuccessMessage } from "../../utils/helpers";
+import { BASE_URL } from "../../utils/constants";
 
 const signUpActions = createAsyncThunk(
   "authSlice/authSlice",
@@ -12,7 +13,7 @@ const signUpActions = createAsyncThunk(
     formdata.append("password2", userData.password2);
     try {
       const response = await fetch(
-        "https://megalab.pythonanywhere.com/registration/",
+        `${BASE_URL}/registration/`,
         {
           method: "POST",
           body: formdata,

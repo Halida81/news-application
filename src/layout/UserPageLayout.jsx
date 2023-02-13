@@ -19,7 +19,6 @@ function UserPageLayout({ children }) {
   const [open, setOpen] = useState(false);
 
   const options = useSelector((state) => state.search.searchResult);
-  const loading = useSelector((state) => state.search.searchResult);
 
   const profileNavigations = [
     {
@@ -41,7 +40,7 @@ function UserPageLayout({ children }) {
   const menuNavigations = [
     {
       id: "1",
-      title: "Избранные новостиa",
+      title: "Избранные новости",
       clickItem: () => {
         navigate("/megalab/selectedNews");
       },

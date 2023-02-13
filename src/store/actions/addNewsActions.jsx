@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { showSuccessMessage } from "../../utils/helpers";
 import getMyPosts from "./getMyPosts.Actions";
 import profileActions from "./profileActions";
+import { BASE_URL } from "../../utils/constants";
 
 const addNewsActions = createAsyncThunk(
   "addNews/addNewsActions",
@@ -17,7 +18,7 @@ const addNewsActions = createAsyncThunk(
     let token = localStorage.getItem("REMEMBER");
 
     try {
-      const response = fetch("https://megalab.pythonanywhere.com/post/", {
+      const response = fetch(`${BASE_URL}/post/`, {
         method: "POST",
         body: formData,
         headers: {
