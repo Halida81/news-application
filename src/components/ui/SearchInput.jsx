@@ -27,7 +27,7 @@ export default function SearchInput({
         );
       });
     }
-    return <p style={{ marginLeft: "20px" }}>не найдено</p>;
+    // return <p style={{ marginLeft: "20px" }}>не найдено</p>;
   };
 
   return (
